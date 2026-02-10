@@ -22,3 +22,4 @@ docker run --rm -p 8080:80 \
 ```
 
 If you deploy at root, keep `BASE_URL=/`.
+
