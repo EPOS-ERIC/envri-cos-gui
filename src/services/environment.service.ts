@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { EventEmitter, Injectable } from '@angular/core';
 import { ApiService } from 'api/api.service';
 import { Model } from './model/model.service';

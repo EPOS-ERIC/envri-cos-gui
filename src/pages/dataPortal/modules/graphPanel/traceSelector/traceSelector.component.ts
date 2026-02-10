@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { DataConfigurable } from 'utility/configurables/dataConfigurable.abstract';
 import { Trace } from '../objects/trace';

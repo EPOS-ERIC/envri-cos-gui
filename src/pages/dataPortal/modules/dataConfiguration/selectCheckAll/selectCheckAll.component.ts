@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { UntypedFormControl, NgForm } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
