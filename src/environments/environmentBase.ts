@@ -18,6 +18,8 @@ export const environmentBase = {
   matomoSiteId: '', // populated during pipeline on env files
   matomoTokenAuth: '', // populated during pipeline
   matomoTrackEvent: true,
+  showPoliciesPopup: true,
+  showWelcomePopup: true,
   menuShare: true,
   minWidth: 900,
   homepage: 'https://www.epos-eu.org',

@@ -9,5 +9,7 @@ export const environment = {
     esriApiKey: '',
     shareSalt: 'CHANGE_ME',
     matomoTrackEvent: false,
+    showPoliciesPopup: false,
+    showWelcomePopup: false,
   },
 };
