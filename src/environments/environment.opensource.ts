@@ -14,6 +14,7 @@ export const environment = {
     showPoliciesPopup: false,
     showWelcomePopup: false,
     showScientificExamples: false,
+    poweredByText: 'This Platform is Powered By EPOS Open Source',
     version: openSourceVersion,
   },
 };

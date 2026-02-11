@@ -22,6 +22,7 @@ export const environmentBase = {
   showPoliciesPopup: true,
   showWelcomePopup: true,
   showScientificExamples: true,
+  poweredByText: 'This Platform is Powered By EPOS ERIC',
   menuShare: true,
   minWidth: 900,
   homepage: 'https://www.epos-eu.org',
