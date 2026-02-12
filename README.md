@@ -9,15 +9,23 @@ Essential commands and runtime config for local development and Docker deploymen
 | Install dependencies                 | `npm ci`          | Run once after checkout or dependency updates |
 | Start open source development server | `npm run dev-oss` | Local URL: `http://localhost:4200/testpath`   |
 | Start internal development server    | `npm run dev`     | Local URL: `http://localhost:4200/testpath`   |
-| Run headless e2e tests               | `npm test`        | Uses Cypress in Chrome                         |
-| Open Cypress runner                  | `npm run cypress` | Interactive Cypress launcher                   |
+| Open Cypress runner                  | `npm run cypress` | Interactive Cypress launcher                  |
+
+## Quality checks
+
+| Task                            | Command                                                | Notes                              |
+| ------------------------------- | ------------------------------------------------------ | ---------------------------------- |
+| Run lint                        | `npm run lint`                                         | Runs Angular ESLint rules          |
+| Run headless e2e tests          | `npm test`                                             | Runs Cypress in Chrome             |
+| Run one Cypress spec (headless) | `npm run test -- --spec "cypress/e2e/your_spec.cy.ts"` | Fast feedback for targeted changes |
 
 ## Build
 
-| Task                             | Command             |
-| -------------------------------- | ------------------- |
-| Create open source build         | `npm run build-oss` |
-| Create internal production build | `npm run build`     |
+| Task                                        | Command                               | Notes                                                   |
+| ------------------------------------------- | ------------------------------------- | ------------------------------------------------------- |
+| Create open source build                    | `npm run build-oss`                   | CI uses this build flavor                               |
+| Create internal production build            | `npm run build`                       | Internal configuration                                  |
+| CI-like build (includes metadata injection) | `./pre-build.sh && npm run build-oss` | Modifies `src/environments/environmentBase.ts` in place |
 
 Build output is written to `dist/`.
 
