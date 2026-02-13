@@ -29,6 +29,7 @@ import { CONTEXT_RESOURCE } from 'api/api.service.factory';
 import { Tracker } from 'utility/tracker/tracker.service';
 import { TrackerAction, TrackerCategory } from 'utility/tracker/tracker.enum';
 import { Popover } from 'driver.js';
+import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
 
 /**
  * This component displays the facet panel and when a user changes their selection,
@@ -80,6 +81,10 @@ export class SearchFacetsComponent implements OnInit {
   // TODO: add comments for below variables.
   public locationRadio = new UntypedFormControl();
   public dataProviders: Array<Organization>;
+
+  // the following variable is being passed in input to template, to be used when we're actually fetching ECVs from the API !! (FOR NOW ONLY MOCKUP DATA)
+  public ECVsList: SimpleECV[] = [];
+
   public types: Array<string> = [ViewType.MAP, ViewType.TABLE, ViewType.GRAPH];
   public selectedOrganisations: Array<FacetLeafItem> = [];
   public selectedTypes: Array<string> = [];
@@ -89,7 +94,13 @@ export class SearchFacetsComponent implements OnInit {
   public startBBoxSource = new Subject<void>();
 
   public organisationsSelected: Array<string> = [];
+
+  // ENVRI: TO BE COMPLETED: !!
+  // the following variable is being passed in input to template, to be used when we're actually fetching ECVs from the API !! (FOR NOW ONLY MOCKUP DATA)
+  public ECVsSelected: Array<string> = [];
+
   public organisationsModel: FacetLeafItemMI;
+  public ecvsModel: FacetLeafItemMI;
 
   public locationRadioSelectTypeCoordinates = SearchFacetsComponent.SELECT_TYPE_COORDINATES;
   public locationRadioSelectTypeGeolocation = SearchFacetsComponent.SELECT_TYPE_GEOLOCATION;
@@ -113,6 +124,7 @@ export class SearchFacetsComponent implements OnInit {
   ) {
     this.countrySelected = null;
     this.organisationsModel = this.model.dataSearchFacetLeafItems;
+    this.ecvsModel = this.model.dataSearchECVs;
   }
 
   /**
@@ -163,13 +175,16 @@ export class SearchFacetsComponent implements OnInit {
           this.numberTypeSelected = arrayType.length;
         }
       }),
-
+      this.model.dataSearchECVs.valueObs.subscribe((arrayECVs: Array<string>) => {
+        if (arrayECVs !== null) {
+          this.ECVsSelected = arrayECVs;
+        }
+      }),
       this.model.dataSearchFacetLeafItems.valueObs.subscribe((arrayDataProviders: Array<string>) => {
         if (arrayDataProviders !== null) {
           this.organisationsSelected = arrayDataProviders;
         }
       })
-
     );
 
     if (this.model.dataSearchGeolocation.get() !== null) {
@@ -180,10 +195,26 @@ export class SearchFacetsComponent implements OnInit {
     void this.dataSearchService.getOrganizations('dataproviders%2Cserviceproviders').then(r => {
       this.dataProviders = r;
     });
+
+    void this.dataSearchService.getECVs().then(r => {
+      this.ECVsList = r || [];
+    });
   }
 
   public dataProviderSelected(listDataProvider: Array<string>): void {
     this.model.dataSearchFacetLeafItems.set(listDataProvider);
+    this.triggerAdvancedSearch();
+  }
+
+  // ENVRI: TO BE COMPLETED: !!
+  // This function will be called to set the selected ECVs in the model and trigger an advanced search (JUST LIKE THE 'dataProvidersSelected()' ABOVE)
+  // should we create a ModelItem for ECVs as well? (like we did for organisations)
+  public ecvSelected(listEcv: Array<string>): void {
+    /* this.ECVsSelected = listEcv;
+    this.model.dataSearchEcv.set(listEcv);
+    this.triggerAdvancedSearch(); */
+    this.ECVsSelected = listEcv;
+    this.model.dataSearchECVs.set(listEcv);
     this.triggerAdvancedSearch();
   }
 
@@ -196,6 +227,10 @@ export class SearchFacetsComponent implements OnInit {
     this.model.dataSearchFacetLeafItems.set([]);
     this.triggerAdvancedSearch();
   }
+  public ecvClear(): void {
+  this.model.dataSearchECVs.set([]);
+  this.triggerAdvancedSearch();
+}
 
 
   public typesToggleSelected(eventOpen: boolean, selectedTypes: Array<string> = []): void {
@@ -297,6 +332,7 @@ export class SearchFacetsComponent implements OnInit {
     this.setBBoxFromControl(SimpleBoundingBox.makeUnbounded(), true, false);
     this.model.dataSearchGeolocation.set(null);
     this.model.dataSearchFacetLeafItems.set([]);
+    this.model.dataSearchECVs.set([]);
     this.model.dataSearchTypeData.set([]);
     this.selectedTypes = [];
     this.radioTempFilterService.setTempRadioFilter(null);

@@ -6,6 +6,7 @@ import { Model } from './model/model.service';
 import { LoggingService } from './logging.service';
 import { Organization } from 'api/webApi/data/organization.interface';
 import { CONTEXT_FACILITY, CONTEXT_RESOURCE, CONTEXT_SOFTWARE } from 'api/api.service.factory';
+import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
 
 /**
  * A service that exposes the "discover" webAPI functionality to the rest of the GUI.
@@ -60,6 +61,13 @@ export class DataSearchService {
     return this.apiService.getOrganizations(type)
       .then((r: Array<Organization>) => {
         return r;
+      });
+  }
+
+  public getECVs(): Promise<Array<SimpleECV> | null> {
+    return this.apiService.getECVs()
+      .then((r: Array<SimpleECV> | null) => {
+        return r || [];
       });
   }
 

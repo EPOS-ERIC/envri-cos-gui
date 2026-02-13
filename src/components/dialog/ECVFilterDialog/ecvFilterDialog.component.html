@@ -1,0 +1,90 @@
+<app-base-dialog [data]="data" [title]="title" class="content-data">
+  <ng-container class="content" id="contentData">
+    <div class="contentWrapper">
+
+      <!-- Filters Section -->
+      <div class="filter">
+        <div class="top nice-scrollbar">
+          <div class="alphabet">
+            <ul>
+              <!-- Selected filter -->
+              <li
+                style="margin-right: 30px"
+                (click)="activateLetter('selected')"
+                [ngClass]="{ danger: activeLetter === 'selected' }"
+              >
+                Selected
+              </li>
+
+              <!-- All filter -->
+              <li
+                (click)="activateLetter('')"
+                [ngClass]="{ danger: activeLetter === '' }"
+              >
+                ALL
+              </li>
+
+
+              <!-- Alphabet filter -->
+              <li
+                *ngFor="let letter of alphabetList"
+                (click)="alphabetCheck.includes(letter) ? activateLetter(letter) : false"
+                [ngClass]="{
+                  danger: letter === activeLetter,
+                  disabled: !alphabetCheck.includes(letter)
+                }"
+              >
+                {{ letter }}
+              </li>
+            </ul>
+          </div>
+
+          <div class="freetext">
+            <!-- Free text search -->
+            <mat-form-field>
+              <mat-label>Free text search</mat-label>
+              <input
+                matInput
+                [formControl]="freeTextFormControl"
+                placeholder="Free text search"
+                aria-name="Name"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Counter for filtered/total ECVs -->
+        <div class="bottom">
+          Found
+          <strong>{{ ECVCounter }}{{ filters.letter || filters.text ? '/' + ECVCounterTotal : '' }}</strong>
+          ECV Categories
+          {{ filters.letter || filters.text ? ' (filtered)' : '' }}
+        </div>
+      </div>
+
+      <!-- ECV categories as a simple vertical list -->
+      <div class="ecvsCategoriesBoxes" style="display: block;">
+
+        <!-- Loop through grouped ECVs by first letter -->
+        <ng-container *ngFor="let group of ECVsList">
+          <h2 class="ecv-letter">{{ group[0] | uppercase }}</h2>
+          <ul style="padding-left: 0; list-style: none; margin-bottom: 15px;">
+            <li *ngFor="let ecv of group[1]" style="margin-bottom: 5px;">
+              <mat-checkbox [(ngModel)]="ecv.isSelected" (change)="updateECVListSelected(ecv)">
+                {{ ecv.name }}
+              </mat-checkbox>
+            </li>
+          </ul>
+        </ng-container>
+
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions" style="margin-top: 20px;">
+      <button mat-flat-button color="primary" (click)="submit()">Apply</button>
+      <button mat-flat-button color="secondary" (click)="cancel()">Cancel</button>
+    </div>
+  </ng-container>
+</app-base-dialog>
+

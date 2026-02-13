@@ -76,5 +76,6 @@ export const environmentBase = {
     url: 'https://catalogue.staging.envri.eu/backoffice/login',
     icon: 'edit_document',
   },
-  ]
+  ],
+  gitlabApiEcvUseCasesUrl:'https://raw.githubusercontent.com/epos-eu/ENVRI-Hub-Next-Use-Cases/refs/heads/main/useCases.JSON',
 };

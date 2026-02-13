@@ -26,6 +26,8 @@ import { DistributionCategories } from '../distributionCategories.interface';
 import { Organization } from '../organization.interface';
 import { SimpleOrganization } from './simpleOrganization';
 import { CONTEXT_SOFTWARE } from 'api/api.service.factory';
+import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
+import { SimpleECVs } from './simpleECVS';
 
 export class JSONDistributionFactory {
   // current versioningStatusInfo properties being received from Back-End
@@ -379,13 +381,13 @@ export class JSONDistributionFactory {
     // temporary object to hold versioning info
     const tempVersioningInfo: { [key: string]: Partial<{ changeDate: string; editorFullName: string }> } = {};
     const versioningStatusInfoKey = 'versioningStatusInfo';
-     // Initialize temp object for this key if it doesn't exist
+    // Initialize temp object for this key if it doesn't exist
     const uid = ObjectAccessUtility.getObjectValueString(distJson, 'uid', false, null);
-     if (!tempVersioningInfo[versioningStatusInfoKey]) {
+    if (!tempVersioningInfo[versioningStatusInfoKey]) {
       tempVersioningInfo[versioningStatusInfoKey] = {};
     }
     JSONDistributionFactory.versioningStatusInfoProperties.forEach((property: string) => {
-      if(property in distJson && (distJson[property] != null && distJson[property] !== '')) {
+      if (property in distJson && (distJson[property] != null && distJson[property] !== '')) {
         const value = ObjectAccessUtility.getObjectValueString(distJson, property, false);
         tempVersioningInfo[versioningStatusInfoKey][property as 'changeDate' | 'editorFullName'] = value;
       }
@@ -424,7 +426,7 @@ export class JSONDistributionFactory {
 
     if (Confirm.isValidString(id) && //
       Confirm.isValidString(title)) {
-      return Optional.ofNonNullable(SimpleDistributionSummary.make(id, title, formatsAppendTo, status, statusTimestamp,statusURL, versioningStatus, versioningStatusInfo,serviceProvider,uid));
+      return Optional.ofNonNullable(SimpleDistributionSummary.make(id, title, formatsAppendTo, status, statusTimestamp, statusURL, versioningStatus, versioningStatusInfo, serviceProvider, uid));
     } else {
       return Optional.empty();
     }
@@ -507,7 +509,7 @@ export class JSONDistributionFactory {
     return organizations;
   }
 
-public static jsonToOrganization(json: unknown): Organization | null {
+  public static jsonToOrganization(json: unknown): Organization | null {
     // Assert json is an array and has at least one element
     if (Array.isArray(json) && json.length > 0) {
       // Extract the first element of the array and assert its type
@@ -796,5 +798,36 @@ public static jsonToOrganization(json: unknown): Organization | null {
         return null;
       }
     });
+  }
+
+  /**
+   * Converts JSON response to array of SimpleECV objects
+   * @param json - The JSON response from the API (expected to be an array)
+   * @returns Array of SimpleECV objects
+   */
+  public static jsonToECVs(json: unknown): Array<SimpleECV> {
+    const ecvs = new Array<SimpleECV>();
+
+    if (Array.isArray(json)) {
+      json.forEach((element: Record<string, unknown>) => {
+        // Extract fields from JSON - adjust property names based on your API response
+        const name = ObjectAccessUtility.getObjectValueString(element, 'name', false, null);
+        const uri = ObjectAccessUtility.getObjectValueString(element, 'uri', false, null)
+
+        if (name === null || uri === null) {
+          console.log('ECV missing name or identifier', element);
+        } else {
+          // Create SimpleECV object
+          const ecv = SimpleECVs.make(
+            name,
+            uri,
+          );
+
+          ecvs.push(ecv);
+        }
+      });
+    }
+
+    return ecvs;
   }
 }
