@@ -6,16 +6,17 @@ import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { UserNotificationService } from 'components/userNotifications/userNotifications.service';
-import { Examples } from 'components/dialog/scientificExamplesDialog/scientificExamplesDialog.component';
+import { ECVUseCase } from 'components/dialog/ECVUseCases/ECVUseCases.component';
 import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 
 
-export class ScientificExamplesService {
-  private readonly endpoint = environment.gitlabApiEcvUseCasesUrl;
-  private examplesSubject = new BehaviorSubject<Examples[]>([]);
+export class ECVUseCasesService {
+  // Live credentials obtained during build, from gitlab variables.
+  private readonly GITLAB_API_USE_CASES_URL = environment.gitlabApiEcvUseCasesUrl;
+  private examplesSubject = new BehaviorSubject<ECVUseCase[]>([]);
   public examples$ = this.examplesSubject.asObservable();
 
   constructor(
@@ -27,8 +28,7 @@ export class ScientificExamplesService {
   }
 
   getscientificExamples(): Observable<object> {
-    return this.http.get(this.endpoint
-    ).pipe(
+    return this.http.get(this.GITLAB_API_USE_CASES_URL).pipe(
       catchError((error) => {
         this.userNotificationService.sendErrorNotification(
           'Error fetching steps from GitLab API.',
@@ -41,15 +41,15 @@ export class ScientificExamplesService {
 
   private fetchScientificExamplesFromGitLab(): void {
     this.getscientificExamples().subscribe({
-      next: (response: Examples[]) => {
+      next: (response: ECVUseCase[]) => {
         try {
           // Directly map the response if it's already an array
-          const examples = response.map((example) => ({
-            example: example.example,
-            title: example.title,
-            description: example.description,
-            listOfServices: example.listOfServices,
-            sharingLinkUrl: example.sharingLinkUrl,
+          const examples = response.map((ecvUseCase) => ({
+            ECV: ecvUseCase.ECV,
+            title: ecvUseCase.title,
+            description: ecvUseCase.description,
+            listOfServices: ecvUseCase.listOfServices,
+            sharingLinkUrl: ecvUseCase.sharingLinkUrl,
           }));
           this.examplesSubject.next(examples);
         } catch (error) {
@@ -62,3 +62,4 @@ export class ScientificExamplesService {
     });
   }
 }
+

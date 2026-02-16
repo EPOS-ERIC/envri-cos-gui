@@ -61,8 +61,19 @@
       [title]="'Filter by Data and Service Providers'"
       [label]="'Data and Service Providers'"
       [model]="organisationsModel"
-      (newDataProvidersSelected)="dataProviderSelected($event)"
-      data-cy="data-provider-filter"></app-data-provider-filter>
+      (newDataProvidersSelected)="dataProviderSelected($event)"></app-data-provider-filter>
+    <app-ecv-filter
+      class="ecvFilterSelect"
+      [ECVsList]="ECVsList"
+      [ECVsSelected]="ECVsSelected"
+      [title]="'Filter by ECV'"
+      [label]="'ECV Filter'"
+      [model]="ecvsModel"
+      (newECVsSelected)="ecvSelected($event)"></app-ecv-filter>
+
+  </div>
+  <div>
+
   </div>
   <div class="row">
     <div class="type-wrapper half" data-cy="data-visibility-selector">
@@ -84,3 +95,4 @@
     </div>
   </div>
 </div>
+

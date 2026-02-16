@@ -21,6 +21,7 @@ import { EnvironmentResource } from 'api/webApi/data/environments/environmentRes
 import { Organization } from 'api/webApi/data/organization.interface';
 import { Domain } from 'api/webApi/data/domain.interface';
 import { ShareApi } from 'api/webApi/classes/shareApi.interface';
+import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
 
 export class DevCompositeApi implements Api {
 
@@ -36,6 +37,9 @@ export class DevCompositeApi implements Api {
     private readonly environmentTypeApi: EnvironmentTypeApi,
   ) { }
 
+  getECVs(): Promise<Array<SimpleECV> | null> {
+    return this.searchApi.getECVs();
+  }
   // ---------------------------
 
   discover(request: DiscoverRequest): Promise<null | DiscoverResponse> {

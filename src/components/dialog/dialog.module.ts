@@ -67,6 +67,8 @@ import { MatomoStatsDialogComponent } from 'components/dialog/matomoStatsDialog/
 import { ScientificExamplesDialogComponent } from './scientificExamplesDialog/scientificExamplesDialog.component';
 import { CrsIncompatDialogComponent } from './crsIncompatDialog/crsIncompatDialog.component';
 import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataStatusDialog.component';
+import { ECVUseCases } from './ECVUseCases/ECVUseCases.component';
+import { ECVFilterDialogComponent } from './ECVFilterDialog/ECVFilterDialog.component';
 
 
 /**
@@ -104,6 +106,8 @@ import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataSt
     SwitchItemConfirmationDialogComponent,
     MatomoStatsDialogComponent,
     CrsIncompatDialogComponent,
+    ECVUseCases,
+    ECVFilterDialogComponent,
     MetaDataStatusDialogComponent
   ],
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

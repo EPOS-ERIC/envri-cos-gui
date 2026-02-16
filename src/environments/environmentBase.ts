@@ -7,7 +7,7 @@
  */
 export const environmentBase = {
   production: false,
-  version: (require('../../package.json') as Record<string, unknown>).version,
+  version: '',
   githash: 'GITHASH', // populated during pipeline
   gitTag: 'GIT_TAG', // populate during pipeline
   commitDate: 'COMMIT_DATE', // populated during pipeline
@@ -20,76 +20,51 @@ export const environmentBase = {
   matomoTokenAuth: '', // populated during pipeline
   matomoTrackEvent: true,
   showPoliciesPopup: true,
-  showWelcomePopup: true,
+  showWelcomePopup: false,
   showScientificExamples: true,
-  poweredByText: 'This Platform is Powered By EPOS ERIC',
-  platformLogoPath: 'assets/img/logo/logo-white.svg',
+  poweredByText: 'Powered by the EPOS Platform Open Source project',
+  platformLogoPath: 'assets/img/logo/ENVRI-Hub-logo-white.svg',
   menuShare: true,
   minWidth: 900,
-  homepage: 'https://www.epos-eu.org',
+  homepage: 'https://envri.eu/',
   aboutpage: 'https://www.epos-eu.org/dataportal',
   termsAndConditions: 'https://www.epos-eu.org/sites/default/files/2026-02/Terms_and_ConditionsJan26_1.pdf',
   vocabularyEndpoint: 'https://registry.epos-eu.org/ncl/system/query',
   fairAssessmentUrl: 'https://ics-c.epos-ip.org/epos-fair-assessment/',
   videos: [
     {
-      title: 'Introduction to EPOS',
-      url: 'https://www.youtube-nocookie.com/embed/A5-WiWeG5-4'
+      title: 'Introduction to ENVRI',
+      url: ''
     },
     {
       title: 'Data search',
-      url: 'https://www.youtube-nocookie.com/embed/qpQuBlZBT7Y'
+      url: ''
     },
     {
       title: 'Configuration and visualization of services',
-      url: 'https://www.youtube-nocookie.com/embed/L2G7ir0cvxI'
+      url: ''
     }
   ],
   modules: {
     data: true, // turns the data section on and off
     analysis: false, // turns the analysis section on and off
-    registry: true, // turns the analysis section on and off
-    software: true // turns the software section on and off
+    registry: false, // turns the analysis section on and off
+    software: false // turns the software section on and off
   },
   mainMenu: [{
     name: 'About',
     children: [
       {
-        name: 'About EPOS Platform',
-        url: 'https://www.epos-eu.org/dataportal',
+        name: 'About ENVRI',
+        url: 'https://envri.eu/',
         icon: 'info'
       },
       {
-        name: 'EPOS API ',
+        name: 'ENVRI API',
         url: window.location.href + '/api/v1/ui/',
         icon: 'cloud'
       },
-      {
-        name: 'Service Monitoring',
-        url: 'https://epos-services.vm.fedcloud.eu/monitoring/',
-        icon: 'monitor_heart'
-      },
-      {
-        name: 'Open Source project',
-        url: 'https://epos-eu.github.io/epos-open-source/',
-        icon: 'shopping_basket'
-      },
-      {
-        name: 'Citation Guide',
-        url: 'https://www.epos-eu.org/sites/default/files/2025-03/EPOS%20DDSS%20Citation%20Guide%20v3.1_12March2025_SCCapproved.pdf',
-        icon: 'speaker_notes'
-      },
-      {
-        name: 'Terms and Conditions ',
-        url: 'https://www.epos-eu.org/sites/default/files/2026-02/Terms_and_ConditionsJan26_1.pdf',
-        icon: 'insert_drive_file'
-      }
     ],
-  },
-  {
-    name: 'Feedback',
-    action: 'feedback',
-    icon: 'feedback',
   },
   {
     name: 'Guided Tour',
@@ -97,18 +72,10 @@ export const environmentBase = {
     icon: 'live_help',
   },
   {
-    name: 'Video Guides',
-    action: 'videoguide',
-    icon: 'movie',
+    name: 'Backoffice',
+    url: 'https://catalogue.staging.envri.eu/backoffice/login',
+    icon: 'edit_document',
   },
-  { name: 'Statistics',
-    action: 'stats',
-    icon: 'analytics'
-  },
-  {
-    name: 'FAIR Assessment',
-    action: 'fairAssessment',
-    icon: 'workspace_premium',
-  }
-  ]
+  ],
+  gitlabApiEcvUseCasesUrl:'https://raw.githubusercontent.com/epos-eu/ENVRI-Hub-Next-Use-Cases/refs/heads/main/useCases.JSON',
 };
