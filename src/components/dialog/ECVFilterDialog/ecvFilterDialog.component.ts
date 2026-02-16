@@ -1,15 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DialogData } from 'components/dialog/baseDialogService.abstract';
-import { Organization } from 'api/webApi/data/organization.interface';
-import { Country } from 'assets/data/countries';
-import { DataProvider } from 'components/dataProviderFilter/dataProviderFilter.component';
 import { Tracker } from 'utility/tracker/tracker.service';
 import { TrackerAction, TrackerCategory } from 'utility/tracker/tracker.enum';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { ECV } from 'components/ecvFilter/ecvFilter.component';
-import { ECVar } from 'api/webApi/data/ECVar.interface';
 import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
 
 
@@ -23,7 +17,7 @@ export interface DetailsDataIn {
 }
 
 @Component({
-  selector: 'app-ECV-filter-dialog',
+  selector: 'app-ecv-filter-dialog',
   templateUrl: './ECVFilterDialog.component.html',
   styleUrls: ['./ECVFilterDialog.component.scss'],
 })
@@ -46,7 +40,7 @@ export class ECVFilterDialogComponent implements OnInit {
   public ECVCounterTotal: number = 0;
 
   // Free text search form control
-  public freeTextFormControl = new UntypedFormControl();
+  public freeTextFormControl = new FormControl<string>('', { nonNullable: true });
 
   // Output array for selected URIs
   public newECVsSelected: string[] = [];
@@ -103,7 +97,7 @@ export class ECVFilterDialogComponent implements OnInit {
     // Subscribe to free text search changes
     this.freeTextFormControl.valueChanges.subscribe(() => {
       // Enable text filter if free text is entered
-      this.filters.text = !!this.freeTextFormControl.value?.trim();
+      this.filters.text = this.freeTextFormControl.value.trim().length > 0;
       this._filter();
       this.refreshAlphabetCheckArray();
     });
@@ -141,10 +135,14 @@ export class ECVFilterDialogComponent implements OnInit {
    */
   public updateECVListSelected(ecv: SimpleECV): void {
     if (ecv.isSelected) {
-      if (!this.ECVsListSelected.includes(ecv)) this.ECVsListSelected.push(ecv);
+      if (!this.ECVsListSelected.includes(ecv)) {
+        this.ECVsListSelected.push(ecv);
+      }
     } else {
       const index = this.ECVsListSelected.indexOf(ecv);
-      if (index > -1) this.ECVsListSelected.splice(index, 1);
+      if (index > -1) {
+        this.ECVsListSelected.splice(index, 1);
+      }
     }
   }
 
@@ -185,7 +183,7 @@ export class ECVFilterDialogComponent implements OnInit {
 
     // Filter by free text
     if (this.filters.text) {
-      const text = this.freeTextFormControl.value?.toLowerCase() || '';
+      const text = this.freeTextFormControl.value.toLowerCase();
       filtered = filtered.filter(ecv => ecv.name.toLowerCase().includes(text));
     }
 
@@ -224,15 +222,18 @@ export class ECVFilterDialogComponent implements OnInit {
 
     // Add non-alphabet first
     groupedArray.forEach(([key, val]) => {
-      if (!this.alphabetList.includes(key.toUpperCase())) result.push([key, val]);
+      if (!this.alphabetList.includes(key.toUpperCase())) {
+        result.push([key, val]);
+      }
     });
 
     // Add alphabetical letters
     groupedArray.forEach(([key, val]) => {
-      if (this.alphabetList.includes(key.toUpperCase())) result.push([key, val]);
+      if (this.alphabetList.includes(key.toUpperCase())) {
+        result.push([key, val]);
+      }
     });
 
     return result;
   }
 }
-

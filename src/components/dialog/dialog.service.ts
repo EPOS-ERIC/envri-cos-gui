@@ -33,7 +33,7 @@ import { scientificExamplesDataType } from './scientificExamplesDialog/scientifi
 import { NewFeaturesService } from './newFeatureDialog/newFeatures.service';
 import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataStatusDialog.component';
 import { CrsIncompatDataIn, CrsIncompatDialogComponent, WmsCrsIncompat } from './crsIncompatDialog/crsIncompatDialog.component';
-import { ECVUseCaseDataType, ECVUseCases } from './ECVUseCases/ECVUseCases.component';
+import { ECVUseCaseDataType, ECVUseCasesComponent } from './ECVUseCases/ECVUseCases.component';
 import { ECVFilterDialogComponent } from './ECVFilterDialog/ECVFilterDialog.component';
 /**
  * A service used for showing dialogs.
@@ -490,8 +490,7 @@ export class DialogService extends BaseDialogService {
     );
   }
 
-  public openECVFilter
-    (ECVsList, ECVsSelected, title = 'Filter by ECV') {
+  public openECVFilter(ECVsList, ECVsSelected, title = 'Filter by ECV') {
     return this.openDialog(
       'ECVFilter',
       ECVFilterDialogComponent,
@@ -678,20 +677,13 @@ export class DialogService extends BaseDialogService {
     return this.dialog.getDialogById('crsIncompat') as MatDialogRef<CrsIncompatDialogComponent, boolean> | null;
   }
 
-  private closeDialogById(dialogId: string): void {
-    const dialog = this.dialog.getDialogById(dialogId);
-    if (null != dialog) {
-      dialog.close();
-    }
-  }
-
   public openECVUseCases(
     confirmButtonHtml = 'Activate Scientific example',
     title = 'Filter by ECV'
   ): Promise<null | DialogData> {
     return this.openDialog<ECVUseCaseDataType>(
       'ECVUseCases',
-      ECVUseCases,
+      ECVUseCasesComponent,
       'no-resize',
       true,
       {
@@ -706,5 +698,12 @@ export class DialogService extends BaseDialogService {
         },
       }
     );
+  }
+
+  private closeDialogById(dialogId: string): void {
+    const dialog = this.dialog.getDialogById(dialogId);
+    if (null != dialog) {
+      dialog.close();
+    }
   }
 }

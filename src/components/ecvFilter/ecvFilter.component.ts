@@ -1,14 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Organization } from 'api/webApi/data/organization.interface';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
-import { SimpleOrganization } from 'api/webApi/data/impl/simpleOrganization';
 import { DialogService } from 'components/dialog/dialog.service';
 import { FacetLeafItemMI } from 'services/model/modelItems/facetLeafItemMI';
 import { Subscription } from 'rxjs';
 import { Unsubscriber } from 'decorators/unsubscriber.decorator';
 import { ECVar } from 'api/webApi/data/ECVar.interface';
-import { HttpClient } from '@angular/common/http';
 
 export interface ECV extends ECVar{
   isSelected: boolean;
@@ -40,7 +37,6 @@ export class EcvFilterComponent implements OnInit {
 
   constructor(
     private readonly dialogService: DialogService,
-    private http: HttpClient,
   ) {
 
     // JUST FOR TESTING PURPOSES, populating the list of ECVs with mock data!
@@ -73,7 +69,9 @@ export class EcvFilterComponent implements OnInit {
    * providers, and closes the select.
    */
   public openFilter(): void {
-    if (!this.ECVsList || this.ECVsList.length === 0) return;
+    if (!this.ECVsList || this.ECVsList.length === 0) {
+      return;
+    }
 
     void this.dialogService
       .openECVFilter(this.ECVsList, this.ECVsSelected, this.title)
@@ -102,11 +100,17 @@ export class EcvFilterComponent implements OnInit {
    * Aggiorna la UI dei checkbox nel mat-select
    */
   private updateCheckboxes(): void {
-    if (!this.ECVsSelect) return;
+    if (!this.ECVsSelect) {
+      return;
+    }
 
     this.ECVsSelect.options.forEach((item: MatOption) => {
       const ecv = item.value as SimpleECV;
-      this.ECVsSelected.includes(ecv.uri) ? item.select() : item.deselect();
+      if (this.ECVsSelected.includes(ecv.uri)) {
+        item.select();
+      } else {
+        item.deselect();
+      }
     });
   }
 
@@ -117,5 +121,4 @@ export class EcvFilterComponent implements OnInit {
     this.updateCheckboxes();
   }
 }
-
 

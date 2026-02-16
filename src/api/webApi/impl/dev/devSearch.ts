@@ -51,19 +51,17 @@ export class DevSearchApi implements SearchApi {
         });
   }
 
-  getECVs(): Promise<Array<SimpleECV> | null> {
+  async getECVs(): Promise<Array<SimpleECV> | null> {
     const builder: UrlBuilder = this.baseUrl.urlBuilder();
     builder.addPathElements(CONTEXT_RESOURCE);
     builder.addPathElements('exvs');
 
-    return this.rest
-      .get(builder.build())
-      .then((json: Record<string, unknown>) => {
-        return JSONDistributionFactory.jsonToECVs(json);
-      })
-      .catch((error) => {
-        console.error('Error fetching ECVs:', error);
-        return null;
-      });
+    try {
+      const json: unknown = await this.rest.get(builder.build());
+      return JSONDistributionFactory.jsonToECVs(json);
+    } catch (error: unknown) {
+      console.error('Error fetching ECVs:', error);
+      return null;
+    }
   }
 }
