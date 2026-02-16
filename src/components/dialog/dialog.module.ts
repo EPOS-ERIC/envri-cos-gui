@@ -68,7 +68,7 @@ import { ScientificExamplesDialogComponent } from './scientificExamplesDialog/sc
 import { CrsIncompatDialogComponent } from './crsIncompatDialog/crsIncompatDialog.component';
 import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataStatusDialog.component';
 import { ECVUseCasesComponent } from './ECVUseCases/ECVUseCases.component';
-import { ECVFilterDialogComponent } from './ECVFilterDialog/ECVFilterDialog.component';
+import { ECVFilterDialogComponent } from './ECVFilterDialog/ecvFilterDialog.component';
 
 
 /**

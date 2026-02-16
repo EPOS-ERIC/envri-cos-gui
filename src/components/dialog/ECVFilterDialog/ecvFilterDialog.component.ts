@@ -18,8 +18,8 @@ export interface DetailsDataIn {
 
 @Component({
   selector: 'app-ecv-filter-dialog',
-  templateUrl: './ECVFilterDialog.component.html',
-  styleUrls: ['./ECVFilterDialog.component.scss'],
+  templateUrl: './ecvFilterDialog.component.html',
+  styleUrls: ['./ecvFilterDialog.component.scss'],
 })
 export class ECVFilterDialogComponent implements OnInit {
 

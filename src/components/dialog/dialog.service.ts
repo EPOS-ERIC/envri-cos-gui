@@ -34,7 +34,7 @@ import { NewFeaturesService } from './newFeatureDialog/newFeatures.service';
 import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataStatusDialog.component';
 import { CrsIncompatDataIn, CrsIncompatDialogComponent, WmsCrsIncompat } from './crsIncompatDialog/crsIncompatDialog.component';
 import { ECVUseCaseDataType, ECVUseCasesComponent } from './ECVUseCases/ECVUseCases.component';
-import { ECVFilterDialogComponent } from './ECVFilterDialog/ECVFilterDialog.component';
+import { ECVFilterDialogComponent } from './ECVFilterDialog/ecvFilterDialog.component';
 /**
  * A service used for showing dialogs.
  *
