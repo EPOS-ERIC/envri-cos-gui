@@ -41,12 +41,13 @@ export class PoliciesComponent {
   public cookiePolicy = true;
   isInfoCollapsed = true;
 
-  toggleInfo(): void {
-    this.isInfoCollapsed = !this.isInfoCollapsed;
-  }
   constructor(
     private readonly policiesService: PoliciesService,
   ) {
+  }
+
+  toggleInfo(): void {
+    this.isInfoCollapsed = !this.isInfoCollapsed;
   }
   setStorage(): void {
     this.policiesService.setConsentsTimestamp(moment());
