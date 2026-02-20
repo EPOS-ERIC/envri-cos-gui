@@ -392,7 +392,7 @@ export class JSONDistributionFactory {
     });
     // fallback: if editorFullName is missing, use editorId as author
     if (!tempVersioningInfo[versioningStatusInfoKey].editorFullName) {
-      tempVersioningInfo[versioningStatusInfoKey].editorFullName = "Unknown";
+      tempVersioningInfo[versioningStatusInfoKey].editorFullName = 'Unknown';
     }
     Object.entries(tempVersioningInfo).forEach(([key, partial]) => {
       if (partial.changeDate && partial.editorFullName) {

@@ -98,19 +98,6 @@ export class ResultsPanelComponent extends BaseResultsPanelComponent implements 
       this.activeDomainData = this.configurables.getDomainInfoBy(this.domains, activeDomainCode as string, 'code');
     }
   }
-
-  /**
-   * The updateConfigs function updates spatial bounds and equipment types based on data search bounds
-   * and equipment types.
-   */
-  protected updateConfigs(): void {
-    super.updateConfigs();
-
-    this.configurables.updateSpatialBounds(this.model.dataSearchBoundsReg.get());
-    this.configurables.updateEquipmentTypes(this.model.dataSearchEquipmentTypeReg.get());
-
-  }
-
   public select(itemSelected: DistributionItem, event: Event | null = null): void {
 
     // if (nothing expanded OR (event not null AND item not null AND selected item is not the currently expanded one))
@@ -159,6 +146,17 @@ export class ResultsPanelComponent extends BaseResultsPanelComponent implements 
       disableClose: false,
       panelClass: 'monitoring-popup-dialog'
     });
+  }
+  /**
+   * The updateConfigs function updates spatial bounds and equipment types based on data search bounds
+   * and equipment types.
+   */
+  protected updateConfigs(): void {
+    super.updateConfigs();
+
+    this.configurables.updateSpatialBounds(this.model.dataSearchBoundsReg.get());
+    this.configurables.updateEquipmentTypes(this.model.dataSearchEquipmentTypeReg.get());
+
   }
 
   private formatTrackerDistributionName(elem: DistributionItem): string {
