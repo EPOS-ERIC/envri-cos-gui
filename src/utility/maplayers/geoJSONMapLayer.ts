@@ -212,12 +212,6 @@ export class GeoJSONMapLayer extends JsonMapLayer {
             this.options.customLayerOptionMarkerType.set(MapLayer.MARKERTYPE_LINE);
             break;
           }
-          case ('geometrycollection'): {
-            // GeometryCollection contains mixed geometry types
-            // Treat as polygon for marker type purposes
-            this.options.customLayerOptionMarkerType.set(MapLayer.MARKERTYPE_POLYGON);
-            break;
-          }
           default: {
             this.options.customLayerOptionMarkerType.set(MapLayer.MARKERTYPE_POLYGON);
             break;

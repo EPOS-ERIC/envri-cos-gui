@@ -63,17 +63,7 @@ export class GeoJSONHelper extends JsonHelper {
       let coords: Position | null = null;
 
       if (null != pointData) {
-        // Handle GeometryCollection
-        if (pointData.type === 'GeometryCollection') {
-          // Extract first Point from GeometryCollection
-          const firstPoint = pointData.geometries?.find(g => g.type === 'Point') as Point | undefined;
-          if (firstPoint) {
-            coords = firstPoint.coordinates;
-          }
-        } else if (pointData.type === 'Point') {
-          coords = (pointData as Point).coordinates;
-        }
-        // For other geometry types, coords remains null
+        coords = (pointData as Point).coordinates;
       } else {
         // check in epos_image_overlay
         if (null != propertiesObj[this.IMAGE_OVERLAY_ATTR]) {
