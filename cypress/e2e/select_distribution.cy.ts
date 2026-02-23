@@ -49,11 +49,7 @@ describe('Test select distribution', () => {
       .click();
 
     // Wait for the request to finish
-    if (service.name === GNSS_STATIONS_WITH_PRODUCTS.name) {
-      cy.wait(service.bboxFilteredRequest);
-    } else {
-      cy.wait(service.dataRequest);
-    }
+    cy.wait(service.dataRequest);
 
     // The loading spinner should not be visible anymore
     cy.get('.mat-progress-spinner')

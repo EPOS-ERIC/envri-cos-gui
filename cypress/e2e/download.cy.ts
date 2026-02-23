@@ -36,11 +36,7 @@ describe('Test download', () => {
       .click();
 
     // Wait for the request to finish
-    if (service.name === GNSS_STATIONS_WITH_PRODUCTS.name) {
-      cy.wait(service.bboxFilteredRequest);
-    } else {
-      cy.wait(service.dataRequest);
-    }
+    cy.wait(service.dataRequest);
 
     // The loading spinner should not be visible anymore
     cy.get('.mat-progress-spinner')
@@ -119,8 +115,8 @@ describe('Test download', () => {
       .contains(service.name)
       .click();
 
-    // Wait for the request to finish (it will match bboxFilteredRequest because of default spatial params)
-    cy.wait(service.bboxFilteredRequest);
+    // Wait for the request to finish 
+    cy.wait(service.detailsRequest);
 
     // The loading spinner should not be visible anymore
     cy.get('.mat-progress-spinner')

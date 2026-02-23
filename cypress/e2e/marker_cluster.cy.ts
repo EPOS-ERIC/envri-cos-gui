@@ -33,7 +33,7 @@ describe('Test marker cluster', () => {
       .click();
 
     // Wait for the request to finish
-    cy.wait(service.bboxFilteredRequest);
+    cy.wait(service.dataRequest);
     cy.wait(500);  // TODO: find a better way to wait for pending data to be processed
 
     // The loading spinner should not be visible anymore

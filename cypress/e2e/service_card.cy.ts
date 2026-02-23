@@ -27,8 +27,7 @@ describe('Service card', () => {
       .click();
 
     // ⏳ Wait for the distribution requests (as in the other test)
-    cy.wait(GNSS_STATIONS_WITH_PRODUCTS.bboxFilteredRequest);
-    cy.wait(GNSS_STATIONS_WITH_PRODUCTS.detailsRequest);
+    cy.wait(GNSS_STATIONS_WITH_PRODUCTS.dataRequest);
     cy.log('Waited for distribution requests');
 
     // Check that the service card has the correct title
