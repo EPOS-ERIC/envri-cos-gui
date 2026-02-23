@@ -373,9 +373,7 @@ export class TableDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
    * `checkSomeOnMapHideFunc` is `true`,
    */
   public toggleMapFeature(element: Array<PopupProperty>, checked: boolean, checkSomeOnMapHideFunc = true): void {
-    console.warn(element);
     const featureIndex = this.getPropertyIdFromArrayPopupProperty(element);
-    console.warn(featureIndex);
     this.toggleOnMapSelected[featureIndex] = checked;
 
     this.refreshHiddenMarkerOnLocalStorage(featureIndex, checked);
@@ -970,4 +968,3 @@ export class TableDisplayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.someOnMapHide = numHiddenOnMap === numFilteredData;
   }
 }
-
