@@ -112,39 +112,36 @@
 
                       <ng-container
                         *ngIf="metadataStatusModeActive === true && element.versioningStatus !== '' && showStatusChipsOnCards ">
+                        <div class="metadata-preview">
+                          <div *ngIf="element.versioningStatusInfo?.versioningStatusInfo?.[0]">
+                            <p class="metadata-row">
+                              <span class="metadata-label">Last change:</span>
+                              <mat-icon class="metadata-icon">calendar_month</mat-icon>
+                              <span class="metadata-value">{{ element.versioningStatusInfo?.versioningStatusInfo[0]?.changeDate | date:'dd/MM/yyyy' }}</span>
+                              <mat-icon class="metadata-icon">schedule</mat-icon>
+                              <span class="metadata-value">{{ element.versioningStatusInfo?.versioningStatusInfo[0]?.changeDate | date:'HH:mm' }}</span>
+                            </p>
+                            <p class="metadata-row">
+                              <span class="metadata-label">Author:</span>
+                              <mat-icon class="metadata-icon">person</mat-icon>
+                              <span class="metadata-value">{{ element.versioningStatusInfo?.versioningStatusInfo[0]?.editorFullName }}</span>
+                            </p>
+                          </div>
 
-                        <div *ngIf="element.versioningStatusInfo?.versioningStatusInfo?.[0]"
-                          style="display: flex; flex-wrap: wrap; justify-content: start; align-items: center;">
-                          <p
-                            style="display: flex; width: 100%; justify-content: start; align-items: center; gap: 2px; margin-bottom: 3px;">
-                            Last change:
-                            <mat-icon>calendar_month</mat-icon>
-                            {{ element.versioningStatusInfo?.versioningStatusInfo[0]?.changeDate | date:'dd/MM/yyyy' }}
-                            <mat-icon>schedule</mat-icon>
-                            {{ element.versioningStatusInfo?.versioningStatusInfo[0]?.changeDate | date:'HH:mm' }}
-                          </p>
-                          <br />
-                          <p
-                            style="display: flex; width: 100%; justify-content: start; align-items: center; gap: 2px; margin-bottom: 3px;">
-                            Author:
-                            <mat-icon>person</mat-icon>
-                            {{ element.versioningStatusInfo?.versioningStatusInfo[0]?.editorFullName }}
+                          <p class="metadata-row metadata-status-row">
+                            <span class="metadata-label">Status:</span>
+                            <mat-chip
+                              class="metadata-chip"
+                              [ngClass]="{
+                                'metadata-published-status': element.versioningStatus === 'PUBLISHED',
+                                'metadata-submitted-status': element.versioningStatus === 'SUBMITTED',
+                                'metadata-draft-status': element.versioningStatus === 'DRAFT',
+                                'metadata-archived-status': element.versioningStatus === 'ARCHIVED'
+                              }">
+                              {{ element.versioningStatus }}
+                            </mat-chip>
                           </p>
                         </div>
-
-                        <p
-                          style="display: flex; width: 100%; justify-content: start; align-items: center; gap: 2px; margin-bottom: 3px;">
-                          Status:
-                          <mat-chip
-                            style="height: auto; font-size: 5px; padding: 0 4px; line-height: 1.2; border-radius: 777px;"
-                            [ngClass]="{
-                          'metadata-published-status': element.versioningStatus === 'PUBLISHED',
-                          'metadata-submitted-status': element.versioningStatus === 'SUBMITTED',
-                          'metadata-draft-status': element.versioningStatus === 'DRAFT',
-                          'metadata-archived-status': element.versioningStatus === 'ARCHIVED'
-                          }">
-                            {{ element.versioningStatus }}</mat-chip>
-                        </p>
                       </ng-container>
 
                       <!-- END OF Metadata Preview Area -->
