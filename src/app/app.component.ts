@@ -18,6 +18,8 @@ import { CONTEXT_RESOURCE } from 'api/api.service.factory';
 import { Tracker } from 'utility/tracker/tracker.service';
 import { NotificationService } from 'services/notification.service';
 import { NewFeaturesService } from 'components/dialog/newFeatureDialog/newFeatures.service';
+import { MetaDataStatusService } from 'services/metaDataStatus.service';
+import { AAAIUser } from 'api/aaai/aaaiUser.interface';
 
 /**
  * This is the standard Angular root component that is included by the index.html file.
@@ -50,6 +52,7 @@ export class AppComponent implements OnInit {
   public hideHeader = false;
   public mobile = false;
   private readonly subscriptions: Array<Subscription> = new Array<Subscription>();
+  private wasAuthenticatedUser = false;
 
   constructor(
     private readonly aaaiService: AaaiService,
@@ -65,14 +68,20 @@ export class AppComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly notificationService: NotificationService,
     private readonly newFeaturesService: NewFeaturesService,
+    private readonly metadataStatusService: MetaDataStatusService,
   ) {
 
-    if ((window.location.href.indexOf('policy-index') < 0)
-      && (!policiesService.hasConsents)) {
+    this.wasAuthenticatedUser = this.aaaiService.getUser() !== null;
+
+    const shouldShowPoliciesPopup = (window.location.href.indexOf('policy-index') < 0)
+      && environment.showPoliciesPopup
+      && (!policiesService.hasConsents);
+
+    if (shouldShowPoliciesPopup) {
       void this.dialogService.openCookiesBanner();
     } else {
       this.checkMobile();
-      if (!informationService.infoEnabled && this.mobile === false) {
+      if (!informationService.infoEnabled && this.mobile === false && environment.showWelcomePopup) {
         void this.dialogService.openInformationBanner().then(() => {
     // After it closes, open the New Features dialog
       this.newFeaturesService.openNewFeatures();});
@@ -136,6 +145,22 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.subscriptions.push(
+      this.aaaiService.watchUser().subscribe((user: null | AAAIUser) => {
+        const isAuthenticated = user !== null;
+        const justLoggedIn = !this.wasAuthenticatedUser && isAuthenticated;
+
+        if (justLoggedIn && this.metadataStatusService.consumePromptPending()) {
+          const metadataAlreadyEnabled = this.localStoragePersister.getValue(LocalStorageVariables.LS_METADATA_PREVIEW_MODE) === true;
+          const skipByPreference = this.metadataStatusService.shouldSkipPromptByPreference();
+
+          if (!metadataAlreadyEnabled && !skipByPreference) {
+            void this.dialogService.openMetaDataStatusDialog();
+          }
+        }
+
+        this.wasAuthenticatedUser = isAuthenticated;
+      }),
+
       this.tourService.tourActiveObservable.subscribe((active: string) => {
         let value: string | null = active;
         if (active !== 'true' && active !== 'false') {
@@ -181,10 +206,11 @@ export class AppComponent implements OnInit {
   private checkMobile(): void {
 
     this.mobile = (window.innerWidth < environment.minWidth) ? true : false;
+    const canShowMobileDisclaimer = this.policiesService.hasConsents || !environment.showPoliciesPopup;
 
     // show mobile disclaimer
     if (this.mobile) {
-      if (this.policiesService.hasConsents) {
+      if (canShowMobileDisclaimer) {
         void this.dialogService.openNoMobileDisclaimer();
         this.dialogService.closeInformationBanner();
       }
