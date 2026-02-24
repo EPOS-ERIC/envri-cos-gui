@@ -128,7 +128,7 @@ jobs:
           tags: |
             type=raw,value=${{ github.ref_name }},enable=${{ github.ref_type == 'tag' }}
             type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || github.ref_type == 'tag' }}
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' }}
             type=sha,prefix=sha-
 
       - name: Build and push image
