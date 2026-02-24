@@ -34,10 +34,11 @@
     div.item-header {
       display: flex;
       padding-right: 0;
+
       &.selected {
         padding: 10px;
 
-        .item-name > p {
+        .item-name>p {
           // text-decoration: underline;
           font-size: 14px;
           color: $color-primary;
@@ -107,40 +108,40 @@
       margin-left: auto;
       white-space: nowrap;
 
-      .status{
+      .status {
         padding-bottom: 16px;
-        
+
         .pointer {
           cursor: pointer;
         }
-    
+
         .icon {
 
           margin-right: 5px;
-          
+
           mat-icon {
             font-size: 14px !important;
             height: 14px !important;
             width: 14px !important;
-    
+
             &.grey {
               color: grey;
             }
-    
+
             &.green {
               color: green;
             }
-    
+
             &.orange {
               color: orange;
             }
-    
+
             &.red {
               color: red;
             }
           }
         }
-      
+
       }
     }
   }
@@ -177,7 +178,8 @@
       transform: rotate(0deg);
     }
   }
-  .expand-item{
+
+  .expand-item {
     margin-left: 7px;
   }
 
@@ -195,19 +197,22 @@
     margin: 0 16px 0 10px;
   }
 
-  .metadata-published-status{
+  .metadata-published-status {
     background-color: $color-primary-l;
     color: white;
   }
-  .metadata-submitted-status{
+
+  .metadata-submitted-status {
     background-color: $color-secondary;
     color: white;
   }
-  .metadata-draft-status{
+
+  .metadata-draft-status {
     background-color: $color-yellow;
     color: white;
   }
-  .metadata-archived-status{
+
+  .metadata-archived-status {
     background-color: grey;
     color: white;
   }
@@ -258,14 +263,17 @@
 
     .metadata-chip {
       height: auto;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 600;
       line-height: 1.2;
       border-radius: 999px;
       padding: 2px 8px;
+      min-height: 32px;
+      display: inline-flex;
+      align-items: center;
     }
   }
-  
+
 
   ::ng-deep .mat-paginator-range-actions {
     button {
