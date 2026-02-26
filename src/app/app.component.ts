@@ -78,21 +78,15 @@ export class AppComponent implements OnInit {
       && (!policiesService.hasConsents);
 
     if (shouldShowPoliciesPopup) {
+      // Open the merged welcome + policies dialog
       void this.dialogService.openCookiesBanner();
     } else {
       this.checkMobile();
-      if (!informationService.infoEnabled && this.mobile === false && environment.showWelcomePopup) {
-        void this.dialogService.openInformationBanner().then(() => {
-    // After it closes, open the New Features dialog
-      this.newFeaturesService.openNewFeatures();});
-      } else {
-        // Open the New Features dialog
-        this.newFeaturesService.openNewFeatures();
-      }
+      // Consent already given — open New Features dialog
+      this.newFeaturesService.openNewFeatures();
       if (this.localStoragePersister.getValue(LocalStorageVariables.LS_GUIDE_TOUR_SNACKBAR_CHECK) === false || this.localStoragePersister.getValue(LocalStorageVariables.LS_GUIDE_TOUR_SNACKBAR_CHECK) === null) {
         void this.notificationService.sendAvailableGuidedTourNotification('Start Guided Tour', 'assets/img/guided_tour_snack_logo_orange.svg');
       }
-
     }
 
     if (policiesService.cookiesEnabled) {
@@ -174,7 +168,8 @@ export class AppComponent implements OnInit {
           // check if there are some configurables from URL
           if (params.share !== undefined) {
 
-            void this.dialogService.closeInformationBanner();
+            // informationsDialog merged into policiesDialog
+            // void this.dialogService.closeInformationBanner();
 
             void this.dialogService.openShareInformationBanner('retrieve', 'YES');
           }
@@ -212,7 +207,8 @@ export class AppComponent implements OnInit {
     if (this.mobile) {
       if (canShowMobileDisclaimer) {
         void this.dialogService.openNoMobileDisclaimer();
-        this.dialogService.closeInformationBanner();
+        // informationsDialog merged into policiesDialog
+        // this.dialogService.closeInformationBanner();
       }
     } else {
       this.dialogService.closeNoMobileDisclaimer();

@@ -1,3 +1,12 @@
+<!--
+  COMMENTED OUT: This entire template's functionality has been merged into PoliciesComponent.
+  The email form, welcome message, and consent UI are now part of the unified
+  Welcome/Policies dialog (policiesDialog).
+
+  Keeping this file for reference purposes.
+-->
+
+<!--
 <app-base-dialog [data]="data" title="Welcome to the EPOS Platform!">
   <ng-container class="content">
     <div class="wrapper">
@@ -41,9 +50,6 @@
                 </mat-error>
               </ng-container>
               <div class="button-row">
-                <!-- <button mat-flat-button type="submit" color="secondary">
-                  KEEP ME UPDATED
-                </button> -->
                 <button type="submit"
                         [ngClass]="data.dataIn.confirmButtonCssClass"
                          mat-flat-button color="primary"
@@ -52,11 +58,6 @@
                          [innerHTML]="data.dataIn.confirmButtonHtml">
                 </button>
               </div>
-              <!-- <div class="button-row">
-                <button class="guide-button" mat-flat-button color="primary" [mat-dialog-close]="true" (click)="handleTourStart($event)">
-                  START GUIDED TOUR
-                </button>
-              </div> -->
             </form>
           </div>
           <div *ngIf="null !== feedback" class="feedback">
@@ -80,3 +81,4 @@
     </div>
   </ng-container>
 </app-base-dialog>
+-->
