@@ -65,12 +65,6 @@ Cypress.Commands.add('policyAccept', () => {
   cy.contains('EPOS POLICIES').should('not.exist');
 });
 
-// // -- Disable Welcome Popup
-Cypress.Commands.add('welcomePopup', () => {
-  cy.contains('button', 'CONTINUE TO THE PLATFORM').click();
-  cy.contains('Welcome to the EPOS Platform!').should('not.exist');
-});
-
 Cypress.Commands.add('newFeatures', () => {
   cy.get('.new-feature-popup .epos-close-btn').click();
   cy.contains('NEW FEATURES').should('not.exist');
@@ -79,7 +73,6 @@ Cypress.Commands.add('newFeatures', () => {
 Cypress.Commands.add('policyAcceptAndWelcomePopup', () => {
   cy.visit('/');
   cy.policyAccept();
-  cy.welcomePopup();
   cy.newFeatures();
 });
 
