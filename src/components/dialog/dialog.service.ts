@@ -186,7 +186,7 @@ export class DialogService extends BaseDialogService {
     return this.openDialog<ConfirmationDataIn>(
       'metaDataStatus',
       MetaDataStatusDialogComponent,
-      'no-resize',
+      ['no-resize', 'metadata-status-dialog'],
       closable,
       {
         dialogTitle: dialogTitle,
@@ -195,7 +195,7 @@ export class DialogService extends BaseDialogService {
         cancelButtonHtml: cancelButtonHtml,
       },
       {
-        width: '30vw'
+        width: '27vw'
       }
     ).then((data: DialogData<ConfirmationDataIn, boolean>) => (null != data) && (data.dataOut));
   }
