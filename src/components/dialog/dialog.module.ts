@@ -40,7 +40,6 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { ParametersDialogComponent } from './parametersDialog/parametersDialog.component';
 import { PipesModule } from 'pipes/pipes.module';
 import { SpatialCoverageMapComponent } from './detailsDialog/spatialCoverageMap/spatialCoverageMap.component';
-// import { InformationsDialogComponent } from './informationsDialog/informationsDialog.component';
 import { TourDialogComponent } from './tourDialog/tourDialog.component';
 import { DownloadsDialogComponent } from './downloadsDialog/downloadsDialog.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -86,7 +85,6 @@ import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataSt
     FirstErrorMessagePipe,
     ParametersDialogComponent,
     SpatialCoverageMapComponent,
-    // InformationsDialogComponent,
     ScientificExamplesDialogComponent,
     TourDialogComponent,
     DownloadsDialogComponent,
