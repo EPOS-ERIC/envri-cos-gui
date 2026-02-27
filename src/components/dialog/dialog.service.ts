@@ -7,7 +7,6 @@ import { ConfirmationDataIn, ConfirmationDialogComponent } from './confirmationD
 import { DisclaimerDialogComponent } from './disclaimerDialog/disclaimerDialog.component';
 import { DetailsDataIn, DetailsDialogComponent } from './detailsDialog/detailsDialog.component';
 import { ParametersDialogComponent } from './parametersDialog/parametersDialog.component';
-import { InformationsDialogComponent } from './informationsDialog/informationsDialog.component';
 import { DownloadsDialogComponent } from './downloadsDialog/downloadsDialog.component';
 import { DataConfigurableI } from 'utility/configurables/dataConfigurableI.interface';
 import { VideoGuidesDialogComponent } from './videoGuidesDialog/videoGuidesDialog.component';
@@ -15,7 +14,7 @@ import { MobileDisclaimerDialogComponent } from './mobileDisclaimerDialog/mobile
 import { ContactFormDialogComponent } from './contactFormDialog/contactFormDialog.component';
 import { AddEditEnvironmentDialogDataIn, CreateEnvironmentFormDialogComponent } from './analysisDialogs/createEnvironmentFormDialog/createEnvironmentFormDialog.component';
 import { Environment } from 'api/webApi/data/environments/environment.interface';
-import { PoliciesComponent } from './policiesDialog/policies.component';
+import { PoliciesComponent } from './policies&InformationDialog/policies.component';
 import { DataConfigurationType } from 'utility/configurables/dataConfigurationType.enum';
 import { DataProviderFilterDialogComponent } from './dataProviderFilterDialog/dataProviderFilterDialog.component';
 import { Organization } from 'api/webApi/data/organization.interface';
@@ -383,8 +382,15 @@ export class DialogService extends BaseDialogService {
     return this.openDialog(
       'Cookie Policies',
       PoliciesComponent,
-      'epos-dialog',
-      false
+      'no-resize',
+      false,
+      null,
+      {
+        width: '600px',
+        position: {
+          top: '150px'
+        }
+      }
     );
   }
 
@@ -399,37 +405,6 @@ export class DialogService extends BaseDialogService {
 
   public closeNoMobileDisclaimer(): void {
     this.closeDialogById('noMobileDisclaimer');
-  }
-
-  public openInformationBanner(
-    messageHtml = 'Confirm action',
-    closable = true,
-    confirmButtonHtml = 'CONTINUE TO THE PLATFORM',
-    confirmButtonCssClass = 'confirm',
-    cancelButtonHtml = 'Cancel',
-  ): Promise<boolean> {
-    return this.openDialog<ConfirmationDataIn>(
-      'informations',
-      InformationsDialogComponent,
-      'no-resize',
-      closable,
-      {
-        messageHtml: messageHtml,
-        confirmButtonHtml: confirmButtonHtml,
-        cancelButtonHtml: cancelButtonHtml,
-        confirmButtonCssClass: confirmButtonCssClass,
-      },
-      {
-        width: '600px',
-        position: {
-          top: '200px'
-        }
-      }
-    ).then((data: DialogData<ConfirmationDataIn, boolean>) => (null != data) && (data.dataOut));
-  }
-
-  public closeInformationBanner(): void {
-    this.closeDialogById('informations');
   }
 
   public openVideoGuideDialog(): Promise<null | DialogData> {
