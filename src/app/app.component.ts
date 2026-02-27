@@ -168,9 +168,6 @@ export class AppComponent implements OnInit {
           // check if there are some configurables from URL
           if (params.share !== undefined) {
 
-            // informationsDialog merged into policiesDialog
-            // void this.dialogService.closeInformationBanner();
-
             void this.dialogService.openShareInformationBanner('retrieve', 'YES');
           }
         })
@@ -207,8 +204,6 @@ export class AppComponent implements OnInit {
     if (this.mobile) {
       if (canShowMobileDisclaimer) {
         void this.dialogService.openNoMobileDisclaimer();
-        // informationsDialog merged into policiesDialog
-        // this.dialogService.closeInformationBanner();
       }
     } else {
       this.dialogService.closeNoMobileDisclaimer();
