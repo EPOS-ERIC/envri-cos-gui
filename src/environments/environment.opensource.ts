@@ -13,6 +13,7 @@ export const environment = {
     matomoTrackEvent: false,
     showPoliciesPopup: false,
     showWelcomePopup: false,
+    showGuidedTourNotificationOnStart: true,
     showScientificExamples: false,
     showFairAssessment: false,
     poweredByText: 'This Platform is Powered By EPOS Open Source',
