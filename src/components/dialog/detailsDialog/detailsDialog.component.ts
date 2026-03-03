@@ -201,11 +201,11 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
     window.open(url, '_blank');
   }
 
-/**
-   * Main function to update the details table.
-   * It acts as a dispatcher: it checks the item type and delegates
-   * the population of the table to specific helper functions.
-   */
+  /**
+     * Main function to update the details table.
+     * It acts as a dispatcher: it checks the item type and delegates
+     * the population of the table to specific helper functions.
+     */
   private updateTable() {
     const tableData = new Array<KeyValue>();
     const tableService = new Array<KeyValue>();
@@ -301,7 +301,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
 
     tableData.push(this.makeKeyValue('Version', this.stringOrElse(version, alt)));
     tableData.push(this.makeKeyValue('Web Page', this.stringOrElse(mainPage, alt)));
-    tableData.push(this.makeKeyValue('Requirements', this.stringOrElse(requirements.join('; '), alt)));
+    tableData.push(this.makeKeyValue('Requirements', this.stringOrElse(requirements, alt)));
     tableData.push(this.makeKeyValue('Creator(s)', this.stringOrElse(creators.join('; '), alt)));
 
     // --- D. Differentiated Logic: Source Code vs Application ---
@@ -314,7 +314,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
       // Mapping: Code Repository -> Download URL
       tableData.push(this.makeKeyValue('Download URL', this.stringOrElse(codeRepo, alt)));
       tableData.push(this.makeKeyValue('Programming Language', this.stringOrElse(progLang.join('; '), alt)));
-      tableData.push(this.makeKeyValue('Runtime Platform', this.stringOrElse(platforms.join('; '), alt)));
+      tableData.push(this.makeKeyValue('Runtime Platform', this.stringOrElse(platforms, alt)));
 
     } else if (isApplication) {
       // Logic for 'software_application'
@@ -323,7 +323,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
       const os = itemDetails.getRuntimePlatform();
 
       tableData.push(this.makeKeyValue('Download URL', this.stringOrElse(downloadUrl, alt)));
-      tableData.push(this.makeKeyValue('Operating System', this.stringOrElse(os.join('; '), alt)));
+      tableData.push(this.makeKeyValue('Operating System', this.stringOrElse(os, alt)));
     }
 
   }

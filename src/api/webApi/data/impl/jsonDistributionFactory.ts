@@ -648,8 +648,8 @@ export class JSONDistributionFactory {
           [], // programmingLanguage
           null, // mainEntityofPage
           null, // softwareVersion
-          [],   // requirements
-          [],   // runtimePlatform
+          '',   // requirements
+          '',   // runtimePlatform
           []    // creator
         );
       } else {
@@ -736,21 +736,22 @@ export class JSONDistributionFactory {
 
       let softwareDownloadLink: string | null = null;
       let codeRepoLink: string | null = null;
-      let runtimePlatform: Array<string> = [];
-
+      let runtimePlatform: string = '';
+      let requirements: string = '';
       if (detailsType === 'software_source_code') {
+        requirements = ObjectAccessUtility.getObjectValueString(rawData, 'softwareRequirements', false);
         codeRepoLink = ObjectAccessUtility.getObjectValueString(rawData, 'codeRepository', false, null);
         softwareDownloadLink = codeRepoLink;
-        runtimePlatform = ObjectAccessUtility.getObjectArray<string>(rawData, 'runtimePlatform', false);
+        runtimePlatform = ObjectAccessUtility.getObjectValueString(rawData, 'runtimePlatform', false);
       } else if (detailsType === 'software_application') {
+        requirements = ObjectAccessUtility.getObjectValueString(rawData, 'requirements', false);
         softwareDownloadLink = ObjectAccessUtility.getObjectValueString(rawData, 'downloadUrl', false, null);
-        runtimePlatform = ObjectAccessUtility.getObjectArray<string>(rawData, 'operatingSystem', false);
+        runtimePlatform = ObjectAccessUtility.getObjectValueString(rawData, 'operatingSystem', false);
       }
 
       const programmingLanguage = ObjectAccessUtility.getObjectArray<string>(rawData, 'programmingLanguage', false);
       const mainEntityOfPage = ObjectAccessUtility.getObjectValueString(rawData, 'mainEntityOfPage', false, null);
       const softwareVersion = ObjectAccessUtility.getObjectValueString(rawData, 'softwareVersion', false, null);
-      const requirements = ObjectAccessUtility.getObjectArray<string>(rawData, 'requirements', false);
       const creator = ObjectAccessUtility.getObjectArray<string>(rawData, 'creator', false);
 
       const finalDownloadURL = softwareDownloadLink ?? standardDownloadURL;
