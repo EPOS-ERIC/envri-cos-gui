@@ -53,7 +53,7 @@ export interface DistributionDetails extends DistributionSummary {
   getProgrammingLanguage(): Array<string>;
   getMainEntityofPage(): string | null;
   getSoftwareVersion(): string | null;
-  getRequirements(): Array<string>;
-  getRuntimePlatform(): Array<string>;
+  getRequirements(): string;
+  getRuntimePlatform(): string;
   getCreator(): Array<string>;
 }
