@@ -21,6 +21,7 @@ export const environmentBase = {
   matomoTrackEvent: true,
   showPoliciesPopup: true,
   showWelcomePopup: false,
+  showGuidedTourNotificationOnStart: false,
   showScientificExamples: true,
   poweredByText: 'Powered by the EPOS Platform Open Source project',
   platformLogoPath: 'assets/img/logo/ENVRI-Hub-logo-white.svg',
