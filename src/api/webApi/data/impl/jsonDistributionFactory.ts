@@ -25,6 +25,7 @@ import { DistributionContactPoint } from '../distributionContactPoint.interface'
 import { DistributionCategories } from '../distributionCategories.interface';
 import { Organization } from '../organization.interface';
 import { SimpleOrganization } from './simpleOrganization';
+import { Creator } from '../creator.interface';
 import { CONTEXT_SOFTWARE } from 'api/api.service.factory';
 
 export class JSONDistributionFactory {
@@ -170,6 +171,43 @@ export class JSONDistributionFactory {
     }
 
     return providers;
+  }
+
+  /**
+   * Parses JSON to create an array of Creator objects
+   */
+  public static jsonToArrayCreator(jsonWithParams: Record<string, unknown>, value: string): Array<Creator> {
+    const creators = new Array<Creator>();
+    const creatorObjects = ObjectAccessUtility.getObjectArray<Record<string, unknown>>(jsonWithParams, value, false);
+
+    if (creatorObjects != null) {
+      creatorObjects.forEach((creatorObj: Record<string, unknown>) => {
+        // check required fields
+        let name = ObjectAccessUtility.getObjectValueString(creatorObj, 'name', false, null);
+        const url = ObjectAccessUtility.getObjectValueString(creatorObj, 'url', false, null);
+        const uid = ObjectAccessUtility.getObjectValueString(creatorObj, 'uid', false, '');
+        const instanceId = ObjectAccessUtility.getObjectValueString(creatorObj, 'instanceid', false, '');
+        const country = ObjectAccessUtility.getObjectValueString(creatorObj, 'country', false, '');
+
+        if (name == null) {
+          console.log('Creator no name', creatorObj);
+        } else {
+          // Append the country code after the name of the creator
+          name = name + (country ? (' - ' + country) : '');
+
+          const createdCreator: Creator = {
+            name,
+            url,
+            uid,
+            instanceId,
+            country
+          };
+          creators.push(createdCreator);
+        }
+      });
+    }
+
+    return creators;
   }
 
   /**
@@ -752,7 +790,7 @@ export class JSONDistributionFactory {
       const programmingLanguage = ObjectAccessUtility.getObjectArray<string>(rawData, 'programmingLanguage', false);
       const mainEntityOfPage = ObjectAccessUtility.getObjectValueString(rawData, 'mainEntityOfPage', false, null);
       const softwareVersion = ObjectAccessUtility.getObjectValueString(rawData, 'softwareVersion', false, null);
-      const creator = ObjectAccessUtility.getObjectArray<string>(rawData, 'creator', false);
+      const creator = JSONDistributionFactory.jsonToArrayCreator(rawData, 'creator');
 
       const finalDownloadURL = softwareDownloadLink ?? standardDownloadURL;
       const finalLicense = softwareLicense ?? standardLicense;

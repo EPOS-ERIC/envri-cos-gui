@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SpatialRange } from 'api/webApi/data/spatialRange.interface';
 import { TourService } from 'services/tour.service';
 import { DataProvider } from 'api/webApi/data/dataProvider.interface';
+import { Creator } from 'api/webApi/data/creator.interface';
 import { AuthenticatedClickService } from 'services/authenticatedClick.service';
 import { SearchService } from 'services/search.service';
 import { DistributionCategories } from 'api/webApi/data/distributionCategories.interface';
@@ -50,6 +51,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
   public dataSource: MatTableDataSource<KeyValue>;
   public dataService: MatTableDataSource<KeyValue>;
   public dataProvider: MatTableDataSource<DataProvider>;
+  public creatorSource: MatTableDataSource<Creator>;
 
   public hasContactUsButton = true;
   public readonly showFairAssessment = environment.showFairAssessment;
@@ -210,6 +212,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
     const tableData = new Array<KeyValue>();
     const tableService = new Array<KeyValue>();
     const tableProvider = new Array<DataProvider>();
+    const tableCreator = new Array<Creator>();
 
     const itemDetails = this.detailsData;
 
@@ -234,6 +237,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
           isSoftwareSourceCode,
           isSoftwareApplication
         );
+        itemDetails.getCreator().forEach(creator => tableCreator.push(creator));
       } else {
         // CASE B: Standard Logic (Web Service, Facility, etc.)
         // Uses the ORIGINAL logic exactly as requested
@@ -250,6 +254,7 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
     this.dataSource = new MatTableDataSource(tableData);
     this.dataService = new MatTableDataSource(tableService);
     this.dataProvider = new MatTableDataSource<DataProvider>(tableProvider);
+    this.creatorSource = new MatTableDataSource<Creator>(tableCreator);
   }
 
   /**
@@ -297,12 +302,12 @@ export class DetailsDialogComponent implements OnInit, AfterViewInit, OnDestroy 
     const mainPage = itemDetails.getMainEntityofPage();
     const version = itemDetails.getSoftwareVersion();
     const requirements = itemDetails.getRequirements();
-    const creators = itemDetails.getCreator();
+
 
     tableData.push(this.makeKeyValue('Version', this.stringOrElse(version, alt)));
     tableData.push(this.makeKeyValue('Web Page', this.stringOrElse(mainPage, alt)));
     tableData.push(this.makeKeyValue('Requirements', this.stringOrElse(requirements, alt)));
-    tableData.push(this.makeKeyValue('Creator(s)', this.stringOrElse(creators.join('; '), alt)));
+    tableData.push(this.makeKeyValue('Creator(s)', ''));
 
     // --- D. Differentiated Logic: Source Code vs Application ---
     if (isSourceCode) {
