@@ -10,6 +10,7 @@ import { DataProvider } from '../dataProvider.interface';
 import { DistributionLevel } from '../distributionLevel.interface';
 import { DistributionContactPoint } from '../distributionContactPoint.interface';
 import { DistributionCategories } from '../distributionCategories.interface';
+import { Creator } from '../creator.interface';
 
 export class SimpleDistributionDetails implements DistributionDetails {
   public readonly isDownloadable: boolean;
@@ -63,7 +64,7 @@ export class SimpleDistributionDetails implements DistributionDetails {
     private readonly softwareVersion: string | null,
     private readonly requirements: string,
     private readonly runtimePlatform: string,
-    private readonly creator: Array<string>
+    private readonly creator: Array<Creator>
   ) {
     this.uid = (uid);
     this.isMappable = this.summary.isMappable;
@@ -117,7 +118,7 @@ export class SimpleDistributionDetails implements DistributionDetails {
     softwareVersion: string | null,
     requirements: string,
     runtimePlatform: string,
-    creator: Array<string>
+    creator: Array<Creator>
   ): DistributionDetails {
     // objects
     Confirm.requiresValid(summary);
@@ -473,7 +474,7 @@ export class SimpleDistributionDetails implements DistributionDetails {
     return this.runtimePlatform;
   }
 
-  getCreator(): Array<string> {
+  getCreator(): Array<Creator> {
     return this.creator;
   }
 }
