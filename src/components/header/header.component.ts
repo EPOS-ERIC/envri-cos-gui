@@ -20,6 +20,7 @@ import { Model } from 'services/model/model.service';
 import { DataSearchService } from 'services/dataSearch.service';
 import { MetaDataStatusService } from 'services/metaDataStatus.service';
 import { NewFeaturesService } from 'components/dialog/newFeatureDialog/newFeatures.service';
+import { BackofficeUserService } from 'services/backofficeUserService';
 
 
 /**
@@ -52,6 +53,7 @@ export class HeaderComponent implements OnInit {
     { value: 'Archived', label: 'Archived', icon: 'trip_origin', color: 'archived-color' }
   ];
 
+  public isBackofficeUser: boolean = false;
   // Metadata Status feature
   public metadataPreviewModeActive: boolean = false;
   // Metadata Status select-option
@@ -77,6 +79,7 @@ export class HeaderComponent implements OnInit {
     private readonly dialogService: DialogService,
     private readonly metadataStatusService: MetaDataStatusService,
     private readonly newFeaturesService: NewFeaturesService,
+    private readonly backofficeUserService: BackofficeUserService,
   ) {
     this.initialMenuData = this.menuService.rootLevelNodes;
 
@@ -109,6 +112,10 @@ export class HeaderComponent implements OnInit {
       this.panelsEvent.invokeLayerControlPanel.subscribe(() => {
         // closes the drop-down menu when the layer control panel opens
         this.dropdown = '';
+      }),
+
+      this.backofficeUserService.backofficeUser.subscribe((isBackofficeUser: boolean) => {
+        this.isBackofficeUser = isBackofficeUser;
       }),
 
       // on triggered from dialog(value===true) OR when LogOut(value===false) OR on page reload
