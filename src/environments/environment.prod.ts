@@ -4,9 +4,8 @@ export const environmentProd = {
   ...environmentBase,
   ...{
     production: true,
-    matomoEndpoint: 'EPOS_PROD_MATOMO_ENDPOINT', // populated during pipeline
-    matomoSiteId: 'EPOS_PROD_MATOMO_SITE_ID', // populated during pipeline
-    matomoTokenAuth: 'EPOS_PROD_MATOMO_TOKEN_AUTH', // populated during pipeline
+    /* matomoEndpoint: 'https://analytics.envri.eu/', */ // keeping it as a reference, not read by the script initializing matomo
+    matomoSiteId: '4',
     matomoTrackEvent: true,
     fairAssessmentUrl: 'https://www.ics-c.epos-eu.org/epos-fair-assessment/',
     modules: {
