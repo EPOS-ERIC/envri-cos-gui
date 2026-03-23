@@ -16,11 +16,11 @@ import { environmentBase } from './environmentBase';
 function getEnvironment() {
   switch (window.location.host) {
 
-    case 'EPOS_ENV_PROD_URL':
+    case 'catalogue.envri.eu':
       return { ...environmentProd };
       break;
 
-    case 'EPOS_ENV_STAGE_URL':
+    case 'catalogue.staging.envri.eu':
       return { ...environmentStage };
       break;
 
