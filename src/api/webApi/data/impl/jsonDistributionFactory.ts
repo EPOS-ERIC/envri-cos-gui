@@ -25,6 +25,7 @@ import { DistributionContactPoint } from '../distributionContactPoint.interface'
 import { DistributionCategories } from '../distributionCategories.interface';
 import { Organization } from '../organization.interface';
 import { SimpleOrganization } from './simpleOrganization';
+import { Creator } from '../creator.interface';
 import { CONTEXT_SOFTWARE } from 'api/api.service.factory';
 import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
 import { SimpleECVs } from './simpleECVS';
@@ -172,6 +173,43 @@ export class JSONDistributionFactory {
     }
 
     return providers;
+  }
+
+  /**
+   * Parses JSON to create an array of Creator objects
+   */
+  public static jsonToArrayCreator(jsonWithParams: Record<string, unknown>, value: string): Array<Creator> {
+    const creators = new Array<Creator>();
+    const creatorObjects = ObjectAccessUtility.getObjectArray<Record<string, unknown>>(jsonWithParams, value, false);
+
+    if (creatorObjects != null) {
+      creatorObjects.forEach((creatorObj: Record<string, unknown>) => {
+        // check required fields
+        let name = ObjectAccessUtility.getObjectValueString(creatorObj, 'name', false, null);
+        const url = ObjectAccessUtility.getObjectValueString(creatorObj, 'url', false, null);
+        const uid = ObjectAccessUtility.getObjectValueString(creatorObj, 'uid', false, '');
+        const instanceId = ObjectAccessUtility.getObjectValueString(creatorObj, 'instanceid', false, '');
+        const country = ObjectAccessUtility.getObjectValueString(creatorObj, 'country', false, '');
+
+        if (name == null) {
+          console.log('Creator no name', creatorObj);
+        } else {
+          // Append the country code after the name of the creator
+          name = name + (country ? (' - ' + country) : '');
+
+          const createdCreator: Creator = {
+            name,
+            url,
+            uid,
+            instanceId,
+            country
+          };
+          creators.push(createdCreator);
+        }
+      });
+    }
+
+    return creators;
   }
 
   /**
@@ -601,7 +639,10 @@ export class JSONDistributionFactory {
       const dataProvider = JSONDistributionFactory.jsonToArrayDataProvider(rawData, 'dataProvider');
       // DDSS ID for internal usage/check during implementation phase
       const internalID = ObjectAccessUtility.getObjectArray<string>(rawData, 'internalID', false);
-      const doi = ObjectAccessUtility.getObjectArray<string>(rawData, 'DOI', false);
+      let doi = ObjectAccessUtility.getObjectArray<string>(rawData, 'DOI', false);
+      if (doi.length === 0) {
+        doi = ObjectAccessUtility.getObjectArray<string>(rawData, 'doi', false);
+      }
       const downloadURL = ObjectAccessUtility.getObjectValueString(rawData, 'downloadURL', false, '');
       const contactPoints = ObjectAccessUtility.getObjectArray<string>(rawData, 'contactPoints', false);
       const keywords = ObjectAccessUtility.getObjectArray<string>(rawData, 'keywords', false);
@@ -677,8 +718,8 @@ export class JSONDistributionFactory {
           [], // programmingLanguage
           null, // mainEntityofPage
           null, // softwareVersion
-          [],   // requirements
-          [],   // runtimePlatform
+          '',   // requirements
+          '',   // runtimePlatform
           []    // creator
         );
       } else {
@@ -712,7 +753,10 @@ export class JSONDistributionFactory {
     return summary.map(sum => {
 
       // Initialize lists
-      const doiList = ObjectAccessUtility.getObjectArray<string>(rawData, 'DOI', false) || [];
+      let doiList = ObjectAccessUtility.getObjectArray<string>(rawData, 'DOI', false);
+      if (doiList.length === 0) {
+        doiList = ObjectAccessUtility.getObjectArray<string>(rawData, 'doi', false);
+      }
       const internalIdList = ObjectAccessUtility.getObjectArray<string>(rawData, 'internalID', false) || [];
 
       // details
@@ -762,22 +806,23 @@ export class JSONDistributionFactory {
 
       let softwareDownloadLink: string | null = null;
       let codeRepoLink: string | null = null;
-      let runtimePlatform: Array<string> = [];
-
+      let runtimePlatform: string = '';
+      let requirements: string = '';
       if (detailsType === 'software_source_code') {
+        requirements = ObjectAccessUtility.getObjectValueString(rawData, 'softwareRequirements', false);
         codeRepoLink = ObjectAccessUtility.getObjectValueString(rawData, 'codeRepository', false, null);
         softwareDownloadLink = codeRepoLink;
-        runtimePlatform = ObjectAccessUtility.getObjectArray<string>(rawData, 'runtimePlatform', false);
+        runtimePlatform = ObjectAccessUtility.getObjectValueString(rawData, 'runtimePlatform', false);
       } else if (detailsType === 'software_application') {
+        requirements = ObjectAccessUtility.getObjectValueString(rawData, 'requirements', false);
         softwareDownloadLink = ObjectAccessUtility.getObjectValueString(rawData, 'downloadUrl', false, null);
-        runtimePlatform = ObjectAccessUtility.getObjectArray<string>(rawData, 'operatingSystem', false);
+        runtimePlatform = ObjectAccessUtility.getObjectValueString(rawData, 'operatingSystem', false);
       }
 
       const programmingLanguage = ObjectAccessUtility.getObjectArray<string>(rawData, 'programmingLanguage', false);
       const mainEntityOfPage = ObjectAccessUtility.getObjectValueString(rawData, 'mainEntityOfPage', false, null);
       const softwareVersion = ObjectAccessUtility.getObjectValueString(rawData, 'softwareVersion', false, null);
-      const requirements = ObjectAccessUtility.getObjectArray<string>(rawData, 'requirements', false);
-      const creator = ObjectAccessUtility.getObjectArray<string>(rawData, 'creator', false);
+      const creator = JSONDistributionFactory.jsonToArrayCreator(rawData, 'creator');
 
       const finalDownloadURL = softwareDownloadLink ?? standardDownloadURL;
       const finalLicense = softwareLicense ?? standardLicense;

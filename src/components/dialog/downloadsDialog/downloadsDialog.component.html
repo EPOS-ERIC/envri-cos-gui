@@ -10,8 +10,7 @@
           <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
               <div class="checkbox-container" *ngIf="dataSource.data.length > 1">
-                <mat-checkbox
-                  (change)="$event ? toggleAllRows() : null"
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
                   [checked]="selection.hasValue() && isAllSelected()"
                   [indeterminate]="selection.hasValue() && !isAllSelected()"
                   [aria-label]="checkboxLabel()"></mat-checkbox>
@@ -19,34 +18,42 @@
             </th>
             <td mat-cell *matCellDef="let row">
               <div class="checkbox-container" *ngIf="dataSource.data.length > 1">
-                <mat-checkbox
-                  (click)="$event.stopPropagation()"
-                  (change)="$event ? selection.toggle(row) : null"
-                  [checked]="selection.isSelected(row)"
-                  [aria-label]="checkboxLabel(row)"></mat-checkbox>
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)"></mat-checkbox>
               </div>
             </td>
           </ng-container>
 
           <!-- File Name Column -->
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by file name">File Name</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by file name">File Name
+            </th>
             <td mat-cell *matCellDef="let element">{{ element.name }}</td>
           </ng-container>
 
           <!-- Type Column -->
           <ng-container matColumnDef="format">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by file format">File Format</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by file format">File
+              Format</th>
             <td mat-cell *matCellDef="let element">{{ element.format }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="environment" *ngIf="environmentOps && environmentSelected !== null">
+          <ng-container matColumnDef="environment" *ngIf="environmentOps">
             <th mat-header-cell *matHeaderCellDef>Add to environment</th>
             <td mat-cell *matCellDef="let element">
               <div class="actions">
-                <button mat-icon-button (click)="addToEnv(element)" color="secondary">
-                  <mat-icon matTooltip="Add to env {{ environmentSelected.name }}" aria-hidden="true" class="share">move_to_inbox</mat-icon>
+                <button mat-icon-button [matMenuTriggerFor]="envMenu" (menuOpened)="loadEnvironments()"
+                  color="secondary">
+                  <mat-icon matTooltip="Add to environment" aria-hidden="true" class="share">move_to_inbox</mat-icon>
                 </button>
+                <mat-menu #envMenu="matMenu" xPosition="after" yPosition="above" [overlapTrigger]="false">
+                  <button mat-menu-item *ngFor="let env of environments" (click)="addToEnv(element, env)">
+                    {{ env.name }}
+                  </button>
+                  <button mat-menu-item disabled *ngIf="environments.length === 0">
+                    No environments available
+                  </button>
+                </mat-menu>
               </div>
             </td>
           </ng-container>
@@ -84,7 +91,8 @@
       <div class="counter">{{ selection.selected.length }} selected</div>
       <mat-form-field class="filter">
         <mat-label>Filter</mat-label>
-        <input #filterInput matInput name="epos-table-data-filter" (keyup)="applyFilter($event)" placeholder="Filter table results..." />
+        <input #filterInput matInput name="epos-table-data-filter" (keyup)="applyFilter($event)"
+          placeholder="Filter table results..." />
       </mat-form-field>
       <mat-paginator #paginator matPaginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50, 100]"></mat-paginator>
     </div>

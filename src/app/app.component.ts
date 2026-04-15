@@ -20,6 +20,8 @@ import { NotificationService } from 'services/notification.service';
 import { NewFeaturesService } from 'components/dialog/newFeatureDialog/newFeatures.service';
 import { MetaDataStatusService } from 'services/metaDataStatus.service';
 import { AAAIUser } from 'api/aaai/aaaiUser.interface';
+import { ApiService } from 'api/api.service';
+import { BackofficeUserService } from 'services/backofficeUserService';
 
 /**
  * This is the standard Angular root component that is included by the index.html file.
@@ -69,6 +71,8 @@ export class AppComponent implements OnInit {
     private readonly notificationService: NotificationService,
     private readonly newFeaturesService: NewFeaturesService,
     private readonly metadataStatusService: MetaDataStatusService,
+    private readonly apiService: ApiService,
+    private readonly backofficeUserService: BackofficeUserService,
   ) {
 
     this.wasAuthenticatedUser = this.aaaiService.getUser() !== null;
@@ -142,19 +146,30 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptions.push(
       this.aaaiService.watchUser().subscribe((user: null | AAAIUser) => {
-        const isAuthenticated = user !== null;
-        const justLoggedIn = !this.wasAuthenticatedUser && isAuthenticated;
 
-        if (justLoggedIn && this.metadataStatusService.consumePromptPending()) {
-          const metadataAlreadyEnabled = this.localStoragePersister.getValue(LocalStorageVariables.LS_METADATA_PREVIEW_MODE) === true;
-          const skipByPreference = this.metadataStatusService.shouldSkipPromptByPreference();
+        if(user != null){
+          void this.apiService.getBackOfficeUser('self').then((userResponse) => {
+            if (userResponse.getGroups().length > 0) {
+              // set user is backoffice user (consumed only by the header at the moment)
+              this.backofficeUserService.setIsBackofficeUser(true);
 
-          if (!metadataAlreadyEnabled && !skipByPreference) {
-            void this.dialogService.openMetaDataStatusDialog();
-          }
+              // decide if to show metadataPreviewDialog
+              const isAuthenticated = user !== null;
+              const justLoggedIn = !this.wasAuthenticatedUser && isAuthenticated;
+
+              if (justLoggedIn && this.metadataStatusService.consumePromptPending()) {
+                const metadataAlreadyEnabled = this.localStoragePersister.getValue(LocalStorageVariables.LS_METADATA_PREVIEW_MODE) === true;
+                const skipByPreference = this.metadataStatusService.shouldSkipPromptByPreference();
+                if (!metadataAlreadyEnabled && !skipByPreference) {
+                  void this.dialogService.openMetaDataStatusDialog();
+                }
+
+              }
+
+              this.wasAuthenticatedUser = isAuthenticated;
+            }
+          });
         }
-
-        this.wasAuthenticatedUser = isAuthenticated;
       }),
 
       this.tourService.tourActiveObservable.subscribe((active: string) => {
