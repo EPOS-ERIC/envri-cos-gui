@@ -6,12 +6,13 @@ import { AAAIUser } from '../aaaiUser.interface';
 import { BasicUser } from './basicUser';
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'environments/environment';
 
 /** OAuth provider implementation */
 @Injectable()
 export class OAuthAuthenticationProvider implements AuthenticationProvider {
   private static readonly EPOS_CLIENT = '2d7f667e-9d6c-4c09-ad15-ceec571ae554';
-  private static readonly CYFRONET_ROOT = 'https://login.staging.envri.eu/auth/realms/envri';
+  private static readonly CYFRONET_ROOT = environment.authRootUrl;
   private static readonly CYFRONET_ISSUER = OAuthAuthenticationProvider.CYFRONET_ROOT;
   private static readonly REVOKE_ENDPOINT = OAuthAuthenticationProvider.CYFRONET_ISSUER + '/revoke';
   private static readonly REDIRECTION_PAGE = '/last-page-redirect';
