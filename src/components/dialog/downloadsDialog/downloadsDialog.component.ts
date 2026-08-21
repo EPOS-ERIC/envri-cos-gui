@@ -272,7 +272,7 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
             return;
           }
 
-          const landingUrl = `https://usegalaxy.eu/data_landings/${uuid}`;
+          const landingUrl = `https://usegalaxy.eu/tool_landings/${uuid}`;
 
           window.open(landingUrl, '_blank');
         },
