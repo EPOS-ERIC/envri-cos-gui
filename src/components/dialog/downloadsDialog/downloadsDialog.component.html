@@ -72,8 +72,8 @@
 
           <!-- Copy URL Column -->
           <ng-container matColumnDef="copy">
-            <th mat-header-cell *matHeaderCellDef>Copy URL</th>
-            <td mat-cell *matCellDef="let element">
+            <th mat-header-cell *matHeaderCellDef [hidden]="onlyDownload">Copy URL</th>
+            <td mat-cell *matCellDef="let element" [hidden]="onlyDownload">
               <div class="actions">
                 <button mat-icon-button [disabled]="element.type === 'CONVERTED'" (click)="copyUrl(element)">
                   <mat-icon matTooltip="Copy Url">link</mat-icon>
@@ -84,8 +84,8 @@
 
           <!-- Galaxy Landing Column -->
           <ng-container matColumnDef="galaxy">
-            <th mat-header-cell *matHeaderCellDef [hidden]="onlyDownload">Galaxy</th>
-            <td mat-cell *matCellDef="let element" [hidden]="onlyDownload">
+            <th mat-header-cell *matHeaderCellDef>Galaxy</th>
+            <td mat-cell *matCellDef="let element">
               <div class="actions">
                 <button mat-icon-button (click)="sendToGalaxyLanding(element)">
                   <mat-icon matTooltip="Send to Galaxy">cloud_upload</mat-icon>
