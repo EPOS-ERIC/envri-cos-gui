@@ -44,4 +44,7 @@ export interface DiscoverRequest {
   getVersioningStatus(): null | Array<string>;
 
   hasTemporalRange(): boolean;
+
+  // used when the apply button is clicked in the ECV filter dialog
+  getECVIds(): null | Array<string>;
 }

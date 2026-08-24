@@ -29,7 +29,6 @@ import { EnvironmentService } from 'services/environment.service';
 import { SimpleEnvironment } from 'api/webApi/data/environments/impl/simpleEnvironment';
 import { SimpleEnvironmentResource } from 'api/webApi/data/environments/impl/simpleEnvironmentResource';
 import { DialogService } from '../dialog.service';
-import { CitationsService } from '../../../services/citations.service';
 import { Tracker } from 'utility/tracker/tracker.service';
 import { TrackerAction, TrackerCategory } from 'utility/tracker/tracker.enum';
 import { environment as currentEnvironment } from 'environments/environment';
@@ -64,7 +63,7 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
   @ViewChild(MatSort) matSort: MatSort;
 
   public dataSource = new MatTableDataSource<FormatElement>([]);
-  public displayedColumns: string[] = ['select', 'name', 'format', 'download', 'copy'];
+  public displayedColumns: string[] = ['select', 'name', 'format', 'download', 'copy', 'galaxy'];
   public selection = new SelectionModel<FormatElement>(true, []);
 
   public serviceName = '';
@@ -74,14 +73,11 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
   public properties: Array<PopupProperty> = [];
 
   public onlyDownload = false;
-  public isLoading = true;
   public subTitle = 'Files available for download';
 
   public environmentOps = false;
   public environmentSelected: SimpleEnvironment | null = null;
   public environments: Environment[] = [];
-
-  public citation: string;
 
   // Property to identify if we are dealing with Software (Source Code or Application)
   private isSoftware = false;
@@ -102,12 +98,11 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
     private readonly analysisConfigurables: AnalysisConfigurablesService,
     private readonly environmentService: EnvironmentService,
     private readonly injector: Injector,
-    private readonly citationService: CitationsService,
     private readonly tracker: Tracker,
   ) {
   }
 
-  public async ngOnInit(): Promise<void> {
+  public ngOnInit(): void {
 
     this.dataConfigurable = this.data.dataIn.dataConfigurable;
     this.environmentOps = this.data.dataIn.environmentOps;
@@ -186,11 +181,6 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
     } else {
       this.spinner = false;
     }
-
-    // Get the citation for this dataset
-    this.citation = (await this.citationService.getDatasetCitation(this.distributionDetails)).citation;
-
-    this.isLoading = false;
   }
 
   public ngAfterViewInit(): void {
@@ -262,6 +252,35 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
       this.tracker.trackEvent(TrackerCategory.DISTRIBUTION, TrackerAction.COPY_URL, this.formatTrackerDistributionName(this.distributionDetails) + Tracker.TARCKER_DATA_SEPARATION + elem.name + Tracker.TARCKER_DATA_SEPARATION + elem.originalFormat);
 
     }
+  }
+
+  public sendToGalaxyLanding(elem: FormatElement): void {
+    void this.getUrlToAdd(elem).then((resolvedUrl: string) => {
+      if (resolvedUrl === '') {
+        this.notifier.sendNotification('Unable to resolve item URL', 'x', 'error', 5000);
+        return;
+      }
+
+      const payload = this.buildGalaxyLandingPayload(elem, resolvedUrl);
+
+      void this.http.post('https://usegalaxy.eu/api/data_landings', payload).subscribe({
+        next: (response: { uuid?: string }) => {
+          const uuid = response.uuid;
+
+          if (uuid === undefined || uuid === '') {
+            this.notifier.sendNotification('Galaxy landing response did not include an UUID', 'x', 'error', 5000);
+            return;
+          }
+
+          const landingUrl = `https://usegalaxy.eu/tool_landings/${uuid}`;
+
+          window.open(landingUrl, '_blank');
+        },
+        error: () => {
+          this.notifier.sendNotification('Failed to send Galaxy landing request', 'x', 'error', 5000);
+        },
+      });
+    });
   }
 
   /**
@@ -749,6 +768,29 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
       console.error('Error while parsing filename from URL:', e);
       return 'download';
     }
+  }
+
+  private buildGalaxyLandingPayload(elem: FormatElement, url: string): Record<string, unknown> {
+    return {
+      // Keep the API contract as-is.
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      request_state: {
+        targets: [
+          {
+            destination: { type: 'hdas' },
+            elements: [
+              {
+                name: elem.name,
+                src: 'url',
+                url,
+                ext: 'auto',
+              }
+            ]
+          }
+        ]
+      },
+      public: true,
+    };
   }
 
   private getOutputFormatParam(): ParameterValue | undefined {

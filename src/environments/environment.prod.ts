@@ -1,19 +1,17 @@
 import { environmentBase } from './environmentBase';
 
+const authRootUrl = decodeURIComponent('__AUTH_ROOT_URL__');
+
 export const environmentProd = {
   ...environmentBase,
-  ...{
-    production: true,
-    matomoEndpoint: 'EPOS_PROD_MATOMO_ENDPOINT', // populated during pipeline
-    matomoSiteId: 'EPOS_PROD_MATOMO_SITE_ID', // populated during pipeline
-    matomoTokenAuth: 'EPOS_PROD_MATOMO_TOKEN_AUTH', // populated during pipeline
-    matomoTrackEvent: true,
-    fairAssessmentUrl: 'https://www.ics-c.epos-eu.org/epos-fair-assessment/',
-    modules: {
-      data: true, // turns the data section on and off
-      analysis: true, // turns the analysis section on and off
-      registry: true, // turns the registry section on and off
-      software: true, // turns the software section on and off
-    },
-  },
+  production: true,
+  matomoEndpoint: 'https://analytics.envri.eu/',
+  matomoSiteId: '4',
+  authRootUrl: authRootUrl.startsWith('http') ? authRootUrl : 'https://login.staging.envri.eu/auth/realms/envri',
+  // look for Backoffice menu item and change url to PROD Backoffice URL, otherwise keep the envBase one.
+  mainMenu: environmentBase.mainMenu.map((item) =>
+    item.name === 'Backoffice'
+      ? { ...item, url: 'https://catalogue.envri.eu/backoffice/login' }
+      : item
+  ),
 };

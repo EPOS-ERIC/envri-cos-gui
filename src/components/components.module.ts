@@ -40,6 +40,7 @@ import { BaseLandingService } from 'pages/dataPortal/services/baseLanding.servic
 import { MenuComponent } from './menu/menu.component';
 import { MenuService } from './menu/menu.service';
 import { PoweredByComponent } from './powered-by/poweredBy.component';
+import { EcvFilterComponent } from './ecvFilter/ecvFilter.component';
 
 /**
  * Module for registering new components that may be used anywhere in the app.
@@ -64,6 +65,7 @@ import { PoweredByComponent } from './powered-by/poweredBy.component';
     BaseResultsPanelComponent,
     MenuComponent,
     PoweredByComponent,
+    EcvFilterComponent,
   ],
   imports: [
     RouterModule,
@@ -104,6 +106,7 @@ import { PoweredByComponent } from './powered-by/poweredBy.component';
     MultiSelectComponent,
     VisibleOnComponent,
     BaseResultsPanelComponent,
+    EcvFilterComponent,
     PoweredByComponent
   ],
 })

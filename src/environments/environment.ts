@@ -8,7 +8,6 @@
  */
 
 import { environmentDevel } from './environment.devel';
-import { environmentLatest } from './environment.latest';
 import { environmentProd } from './environment.prod';
 import { environmentStage } from './environment.stage';
 import { environmentBase } from './environmentBase';
@@ -17,16 +16,12 @@ import { environmentBase } from './environmentBase';
 function getEnvironment() {
   switch (window.location.host) {
 
-    case 'EPOS_ENV_PROD_URL':
+    case 'catalogue.envri.eu':
       return { ...environmentProd };
       break;
 
-    case 'EPOS_ENV_STAGE_URL':
+    case 'catalogue.staging.envri.eu':
       return { ...environmentStage };
-      break;
-
-    case 'EPOS_ENV_LATEST_URL':
-      return { ...environmentLatest };
       break;
 
     case 'localhost:4200':

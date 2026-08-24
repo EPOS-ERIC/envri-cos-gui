@@ -7,6 +7,7 @@ import { Organization } from 'api/webApi/data/organization.interface';
 import { UrlBuilder } from 'api/webApi/classes/urlBuilder.interface';
 import { JSONDistributionFactory } from 'api/webApi/data/impl/jsonDistributionFactory';
 import { CONTEXT_RESOURCE } from 'api/api.service.factory';
+import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
 
 /**
  * **NOT CURRENTLY IN USE. It was originally created when we had an infrastructure search**
@@ -48,5 +49,19 @@ export class DevSearchApi implements SearchApi {
         .get(builder.build()).then((json: Record<string, unknown>) => {
           return JSONDistributionFactory.jsonToOrganization(json);
         });
+  }
+
+  async getECVs(): Promise<Array<SimpleECV> | null> {
+    const builder: UrlBuilder = this.baseUrl.urlBuilder();
+    builder.addPathElements(CONTEXT_RESOURCE);
+    builder.addPathElements('exvs');
+
+    try {
+      const json: unknown = await this.rest.get(builder.build());
+      return JSONDistributionFactory.jsonToECVs(json);
+    } catch (error: unknown) {
+      console.error('Error fetching ECVs:', error);
+      return null;
+    }
   }
 }

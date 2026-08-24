@@ -7,14 +7,14 @@ import { catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { UserNotificationService } from 'components/userNotifications/userNotifications.service';
 import { Examples } from 'components/dialog/scientificExamplesDialog/scientificExamplesDialog.component';
+import { environment } from 'environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 
 
 export class ScientificExamplesService {
-  // Live credentials obtained during build, from gitlab variables.
-  private readonly endpoint = window.location.href + (window.location.href.endsWith('/') ? '' : '/') + 'api/v1/scientific_example';
+  private readonly endpoint = environment.gitlabApiEcvUseCasesUrl;
   private examplesSubject = new BehaviorSubject<Examples[]>([]);
   public examples$ = this.examplesSubject.asObservable();
 

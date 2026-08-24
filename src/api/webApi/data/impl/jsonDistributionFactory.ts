@@ -27,6 +27,8 @@ import { Organization } from '../organization.interface';
 import { SimpleOrganization } from './simpleOrganization';
 import { Creator } from '../creator.interface';
 import { CONTEXT_SOFTWARE } from 'api/api.service.factory';
+import { SimpleECV } from 'components/ecvFilter/ecvFilter.component';
+import { SimpleECVs } from './simpleECVS';
 
 export class JSONDistributionFactory {
   // current versioningStatusInfo properties being received from Back-End
@@ -572,6 +574,36 @@ export class JSONDistributionFactory {
   }
 
   /**
+   * Converts JSON response to array of SimpleECV objects
+   * @param json - The JSON response from the API (expected to be an array)
+   * @returns Array of SimpleECV objects
+   */
+  public static jsonToECVs(json: unknown): Array<SimpleECV> {
+    const ecvs = new Array<SimpleECV>();
+
+    if (Array.isArray(json)) {
+      json.forEach((element: Record<string, unknown>) => {
+        const name = ObjectAccessUtility.getObjectValueString(element, 'name', false, null);
+        const uri = ObjectAccessUtility.getObjectValueString(element, 'uri', false, null);
+
+        if (name === null || uri === null) {
+          console.log('ECV missing name or identifier', element);
+          return;
+        }
+
+        const ecv = SimpleECVs.make(
+          name,
+          uri,
+        );
+
+        ecvs.push(ecv);
+      });
+    }
+
+    return ecvs;
+  }
+
+  /**
    * Builds a standard DistributionDetails object (e.g., for web services or file distributions).
    * This contains the original parsing logic.
    */
@@ -846,4 +878,5 @@ export class JSONDistributionFactory {
       }
     });
   }
+
 }

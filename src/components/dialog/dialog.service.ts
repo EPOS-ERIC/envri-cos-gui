@@ -32,9 +32,9 @@ import { scientificExamplesDataType } from './scientificExamplesDialog/scientifi
 import { NewFeaturesService } from './newFeatureDialog/newFeatures.service';
 import { MetaDataStatusDialogComponent } from './metaDataStatusDialog/metaDataStatusDialog.component';
 import { CrsIncompatDataIn, CrsIncompatDialogComponent, WmsCrsIncompat } from './crsIncompatDialog/crsIncompatDialog.component';
+import { ECVUseCaseDataType, ECVUseCasesComponent } from './ECVUseCases/ECVUseCases.component';
+import { ECVFilterDialogComponent } from './ECVFilterDialog/ecvFilterDialog.component';
 import { environment } from 'environments/environment';
-
-
 /**
  * A service used for showing dialogs.
  *
@@ -442,6 +442,24 @@ export class DialogService extends BaseDialogService {
     );
   }
 
+  public openECVFilter(ECVsList, ECVsSelected, title = 'Filter by ECV') {
+    return this.openDialog(
+      'ECVFilter',
+      ECVFilterDialogComponent,
+      'epos-dialog',
+      false,
+      {
+        ECVsList: ECVsList,
+        ECVsSelected: ECVsSelected,
+        title: title,
+      },
+      {
+        width: '80vw',
+        height: '80vh',
+      }
+    );
+  }
+
   public openGraphPanel(): void {
 
     const widthWindows = window.innerWidth;
@@ -611,6 +629,29 @@ export class DialogService extends BaseDialogService {
     return this.dialog.getDialogById('crsIncompat') as MatDialogRef<CrsIncompatDialogComponent, boolean> | null;
   }
 
+  public openECVUseCases(
+    confirmButtonHtml = 'Activate Scientific example',
+    title = 'Filter by ECV'
+  ): Promise<null | DialogData> {
+    return this.openDialog<ECVUseCaseDataType>(
+      'ECVUseCases',
+      ECVUseCasesComponent,
+      'no-resize',
+      true,
+      {
+        confirmButtonHtml: confirmButtonHtml,
+        title: title,
+      },
+      {
+        width: '1090px',
+        position: {
+          top: '200px',
+          right: '50px',
+        },
+      }
+    );
+  }
+
   private getLeftSidenavPosition(): DOMRect {
     const sidenavCandidates = [
       { enabled: environment.modules.data, id: 'sidenavleft' },
@@ -639,6 +680,4 @@ export class DialogService extends BaseDialogService {
       dialog.close();
     }
   }
-
-
 }

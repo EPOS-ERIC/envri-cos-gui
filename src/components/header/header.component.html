@@ -1,7 +1,7 @@
 <header class="header">
   <div class="header-logo-wrapper">
     <a class="header-logo" (click)="clickItem({ id: 'homepage', url: urlHomepage, newTab: true })">
-      <img [src]="environment.platformLogoPath" />
+      <img [src]="environment.platformLogoPath" alt="Platform logo" />
     </a>
     <div class="title">
       <p class="main"></p>
@@ -49,7 +49,7 @@
         <div class="nav-top-items-item guest">
           <a class="nav-top-items-item-text" (click)="scientficExamples()" data-toggle="dropdown">
             <mat-icon>summarize</mat-icon>
-            <span class="hidden-xs text">Scientific Examples</span>
+            <span class="hidden-xs text">ECVs Use Cases</span>
           </a>
         </div>
       </li>

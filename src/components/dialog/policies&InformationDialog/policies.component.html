@@ -1,136 +1,76 @@
-<div class="logo-container">
-  <img src="assets/img/logo/logo.svg" alt="EPOS Logo" class="welcome-logo" />
-  <div class="intro-text">
-    This Platform is regularly updated, more data will be made readily available.
-  </div>
-</div>
-
-<div class="two-column-layout nice-scrollbar">
-
-  <!-- LEFT SIDE: Required -->
-  <div class="left-column">
-    <div class="column-label required-label">
-      <mat-icon>verified</mat-icon> Required
+<h1>ENVRI CATALOGUE OF SERVICES POLICIES</h1>
+<div class="policies-grid nice-scrollbar">
+  <!-- ENVRI-specific information -->
+  <div class="envri-info" [class.collapsed]="isInfoCollapsed">
+    <div class="info-header" (click)="toggleInfo()">
+      <span class="info-icon">ℹ️</span>
+      <h2>Welcome to the evolving ENVRI Catalogue of Services!</h2>
+      <button class="toggle-button" type="button" aria-label="Toggle info">
+        <mat-icon>{{ isInfoCollapsed ? 'expand_more' : 'expand_less' }}</mat-icon>
+      </button>
     </div>
-    <div class="policies-section">
-
-      <!-- Terms and Conditions -->
-      <div class="policy-item">
-        <details class="policy-details" #termsDetails open>
-          <summary class="policy-header">
-            <mat-checkbox #toggleTerms [checked]="false" data-cy="toggle-terms-checkbox"
-              (click)="$event.stopPropagation()"></mat-checkbox>
-            <label class="policy-label" [for]="toggleTerms.inputId">I consent to Terms and Conditions</label>
-            <mat-icon class="chevron">expand_more</mat-icon>
-          </summary>
-          <p class="policy-description">
-            Here you will find the conditions under which you use the EPOS Platform. This includes acceptable use
-            and liability disclaimer. If you do not consent to such use of the platform, further access to the platform
-            is
-            denied.
-            <a target="_blank" rel="noopener noreferrer"
-              href="https://www.epos-eu.org/sites/default/files/2026-02/Terms_and_ConditionsJan26_1.pdf">
-              <mat-icon aria-hidden="false">description</mat-icon>
-            </a>
-          </p>
-        </details>
+    <div class="status-list" [@collapse]="isInfoCollapsed ? 'collapsed' : 'expanded'">
+      <div class="status-item">
+        <span class="status-icon building">🛠️</span>
+        <p>The ENVRI Catalogue of Services is being continuously improved</p>
       </div>
-
-      <!-- Privacy Policy -->
-      <div class="policy-item">
-        <details class="policy-details" open>
-          <summary class="policy-header">
-            <mat-checkbox #togglePrivacy [checked]="false" data-cy="toggle-privacy-checkbox"
-              (click)="$event.stopPropagation()"></mat-checkbox>
-            <label class="policy-label" [for]="togglePrivacy.inputId">I understand and acknowledge the Privacy Policy
-              document</label>
-            <mat-icon class="chevron">expand_more</mat-icon>
-          </summary>
-          <p class="policy-description">
-            The Privacy policy explains how EPOS ERIC manages and protects personal data, particularly in the sense of
-            GDPR (General Data Protection Regulation).
-            If you do not consent to such use of your personal data, further access to the platform is denied.
-            <a target="_blank" rel="noopener noreferrer"
-              href="https://www.epos-eu.org/sites/default/files/Privacy_Policy.pdf">
-              <mat-icon aria-hidden="false">description</mat-icon>
-            </a>
-          </p>
-        </details>
+      <div class="status-item">
+        <span class="status-icon ready">✅</span>
+        <p>"Services" with "Data Visualization = Map" are tested and fully functional</p>
+      </div>
+      <div class="status-item">
+        <span class="status-icon progress">⚙️</span>
+        <p>Some "Legacy" services are still being updated and may offer limited functionality</p>
       </div>
     </div>
   </div>
-
-  <!-- RIGHT SIDE: Optional -->
-  <div class="right-column">
-    <div class="column-label optional-label">
-      <mat-icon>info_outline</mat-icon> Optional
-    </div>
-
-
-
-    <!-- Email form -->
-    <div class="policy-item email-section">
-      <details class="policy-details" #emailDetails>
-        <summary class="policy-header">
-          <mat-slide-toggle #emailToggle (click)="$event.stopPropagation()"
-            (change)="toggleEmailDetails(emailDetails, $event)"></mat-slide-toggle>
-          <label class="policy-label" [for]="emailToggle.inputId">Would you like to receive updates about the
-            platform?</label>
-        </summary>
-        <div class="email-form-container">
-          <ng-container *ngIf="show === 'form'">
-            <form class="email-form" [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup.value)">
-              <mat-form-field class="form-element">
-                <input matInput placeholder="Name" formControlName="firstName">
-              </mat-form-field>
-              <mat-form-field class="form-element">
-                <input matInput placeholder="E-mail address" formControlName="email">
-                <mat-error *ngIf="!emailCtrl.valid && emailCtrl.touched">
-                  {{ getErrorEmail() }}
-                </mat-error>
-              </mat-form-field>
-            </form>
-          </ng-container>
-          <div *ngIf="feedback !== null" class="feedback">
-            <p class="big"><strong>Thank you!</strong></p>
-            <p>Your request has been received.</p>
-          </div>
-          <div *ngIf="errors.length > 0" class="errors">
-            <ng-container *ngFor="let error of errors">
-              <span [innerHTML]="error"></span>
-            </ng-container>
-          </div>
-        </div>
-      </details>
-    </div>
-
-    <!-- Cookies -->
-    <div class="policy-item">
-      <details class="policy-details" open>
-        <summary class="policy-header">
-          <mat-slide-toggle #cookiesToggle [(ngModel)]="cookiePolicy"
-            (click)="$event.stopPropagation()"></mat-slide-toggle>
-          <label class="policy-label" [for]="cookiesToggle.inputId">COOKIES</label>
-          <mat-icon class="chevron">expand_more</mat-icon>
-        </summary>
-        <p class="policy-description">
-          Websites utilise cookies to store certain information. EPOS Platform uses cookies only to monitor
-          performance anonymously, information used in improving the platform. You may choose to allow these cookies or
-          not. Either choice does not prevent use of the platform.
-          <a target="_blank" rel="noopener noreferrer"
-            href="https://www.epos-eu.org/sites/default/files/Cookie_Policy.pdf">
-            <mat-icon aria-hidden="false">description</mat-icon>
-          </a>
-        </p>
-      </details>
+  <div class="policy-item">
+    <mat-checkbox #toggleTerms [checked]="false" data-cy="toggle-terms-checkbox"></mat-checkbox>
+    <div class="policy-content">
+      <label id="terms-checkbox-label" [for]="toggleTerms.inputId">I consent to Terms and Conditions</label>
+      <p class="details">
+        Here you will find the conditions under which you use the ENVRI Catalogue of Services. This includes acceptable
+        use and liability disclaimer. If you do not consent to such use of the catalogue, further access to the
+        catalogue is
+        denied. <a href="assets/policies and services/ENVRI Catalogue of Services Terms and Conditions.pdf"
+          target="_blank" rel="noopener noreferrer">Read Terms and Conditions <mat-icon>open_in_new</mat-icon></a>
+      </p>
     </div>
   </div>
 
-</div>
+  <div class="policy-item">
+    <mat-checkbox #togglePrivacy [checked]="false" data-cy="toggle-privacy-checkbox"></mat-checkbox>
+    <div class="policy-content">
+      <label id="privacy-checkbox-label" [for]="togglePrivacy.inputId">I understand and acknowledge the Privacy Policy
+        document</label>
+      <p class="details">
+        The Privacy policy explains how ENVRI Catalogue of Services manages and protects personal data, particularly in
+        the sense of GDPR (General Data Protection Regulation).
+        If you do not consent to such use of your personal data, further access to the catalogue is denied.
+        <a href="assets/policies and services/ENVRI Catalogue of Services PRIVACY POLICY.pdf" target="_blank"
+          rel="noopener noreferrer">Read Privacy Policy <mat-icon>open_in_new</mat-icon></a>
+      </p>
+    </div>
+  </div>
 
-<!-- Submit button (full width below both columns) -->
-<div class="actions">
-  <button class="submit-butt" mat-flat-button color="primary"
-    [disabled]="isSubmitDisabled(toggleTerms.checked, togglePrivacy.checked)" (click)="submitAll()"
-    data-cy="accept-terms-button">WELCOME TO THE PLATFORM</button>
+  <div class="policy-item">
+    <mat-slide-toggle #cookiesToggle [(ngModel)]="cookiePolicy"></mat-slide-toggle>
+    <div class="policy-content">
+      <label [for]="cookiesToggle.inputId">COOKIES</label>
+      <p class="details">
+        Websites utilise cookies to store certain information. ENVRI Catalogue of Services uses cookies only to monitor
+        performance anonymously, information used in improving the catalogue. You may choose to allow these cookies or
+        not. Either choice does not prevent use of the catalogue.
+        <a href="assets/policies and services/ENVRI Catalogue of Services - Cookie Policy.pdf" target="_blank"
+          rel="noopener noreferrer">Read Cookie Policy <mat-icon>open_in_new</mat-icon></a>
+      </p>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="submit-butt" mat-flat-button color="primary"
+      [disabled]="!toggleTerms.checked || !togglePrivacy.checked" (click)="setStorage()"
+      data-cy="accept-terms-button">Submit</button>
+  </div>
+
 </div>

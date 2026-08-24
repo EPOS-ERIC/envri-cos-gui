@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { MatomoTracker } from '@ngx-matomo/tracker';
 import { environment } from 'environments/environment';
 import { PoliciesService } from 'services/policiesService.service';
 
@@ -9,7 +8,6 @@ export class Tracker {
   public static readonly TARCKER_DATA_SEPARATION = '|';
 
   constructor(
-    private readonly tracker: MatomoTracker,
     private policiesService: PoliciesService,
   ) {
   }
@@ -32,7 +30,11 @@ export class Tracker {
    */
   public trackEvent(category: string, action: string, name?: string, value?: number): void {
     if (environment.matomoTrackEvent && this.policiesService.cookiesEnabled) {
-      this.tracker.trackEvent(category, action, name, value);
+      // eslint-disable-next-line no-underscore-dangle
+      const paq = (window as Window & { _paq?: Array<Array<string | number | undefined>> })._paq;
+      if (Array.isArray(paq)) {
+        paq.push(['trackEvent', category, action, name, value]);
+      }
     }
   }
 
@@ -41,7 +43,11 @@ export class Tracker {
    */
   public trackPageView(): void {
     if (this.policiesService.cookiesEnabled) {
-      this.tracker.trackPageView();
+      // eslint-disable-next-line no-underscore-dangle
+      const paq = (window as Window & { _paq?: Array<Array<string>> })._paq;
+      if (Array.isArray(paq)) {
+        paq.push(['trackPageView']);
+      }
     }
   }
 

@@ -109,6 +109,13 @@ export class DevDiscoverApi implements DiscoverApi {
       builder.addParameter('organisations', value);
     }
 
+    // ECVs
+    const ecvIds = request.getECVIds();
+    if (ecvIds !== null && ecvIds.length > 0) {
+      const value: string = ecvIds.join(',');
+      builder.addParameter('exvs', value);
+    }
+
     if (request.getContext() === CONTEXT_FACILITY) {
       // facility Type
       const facilityTypes = request.getFacilityTypeIds();

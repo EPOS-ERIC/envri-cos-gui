@@ -13,7 +13,8 @@ export class SimpleDiscoverRequest implements DiscoverRequest {
     private readonly organisationIds: null | Array<string>,
     private readonly facilityTypeIds: null | Array<string>,
     private readonly equipmentTypeIds: null | Array<string>,
-    private readonly versioningStatus: null | Array<string>
+    private readonly versioningStatus: null | Array<string>,
+    private readonly ECVIds: null | Array<string>,
   ) { }
 
   public static makeEmptyQuery(): DiscoverRequest {
@@ -32,9 +33,10 @@ export class SimpleDiscoverRequest implements DiscoverRequest {
     organisationIds: null | Array<string> = null,
     facilityTypeIds: null | Array<string> = null,
     equipmentTypeIds: null | Array<string> = null,
-    versioningStatus: null | Array<string> = null
+    versioningStatus: null | Array<string> = null,
+    ECVIds: null | Array<string> = null,
   ): DiscoverRequest {
-    return new SimpleDiscoverRequest(context, query, bbox, keywordIds, organisationIds, facilityTypeIds, equipmentTypeIds, versioningStatus);
+    return new SimpleDiscoverRequest(context, query, bbox, keywordIds, organisationIds, facilityTypeIds, equipmentTypeIds, versioningStatus, ECVIds);
   }
 
   getContext(): null | string {
@@ -74,4 +76,7 @@ export class SimpleDiscoverRequest implements DiscoverRequest {
     throw new Error('Method not implemented.');
   }
 
+  getECVIds(): null | Array<string> {
+    return this.ECVIds;
+  }
 }

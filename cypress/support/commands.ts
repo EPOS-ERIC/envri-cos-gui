@@ -55,25 +55,17 @@ import { GNSS_STATIONS_WITH_PRODUCTS, Service } from './constants';
 
 // // -- Accept policies
 Cypress.Commands.add('policyAccept', () => {
-  // PoliciesService.storeConsentsTimestamp(moment());
-  // PoliciesService.storeCookieConsent(true);
-
   cy.getByDataCy('toggle-terms-checkbox').find('.mat-checkbox-inner-container').click();
   cy.getByDataCy('toggle-privacy-checkbox').find('.mat-checkbox-inner-container').click();
+
   cy.getByDataCy('accept-terms-button').click();
 
-  cy.contains('EPOS POLICIES').should('not.exist');
-});
-
-Cypress.Commands.add('newFeatures', () => {
-  cy.get('.new-feature-popup .epos-close-btn').click();
-  cy.contains('NEW FEATURES').should('not.exist');
+  cy.contains('Welcome to the evolving ENVRI Catalogue of Services').should('not.exist');
 });
 
 Cypress.Commands.add('policyAcceptAndWelcomePopup', () => {
   cy.visit('/');
   cy.policyAccept();
-  cy.newFeatures();
 });
 
 // Command to do get('[data-cy="..."') in a more readable way
@@ -90,7 +82,8 @@ Cypress.Commands.add('init', () => {
   cy.intercept('GET', /testpath\/api\/v1\/resources\/organizations.*/, { fixture: 'organizations.json' }).as('organizations');
   cy.policyAcceptAndWelcomePopup();
   cy.wait(['@organizations']);
-  cy.wait(['@search', '@search', '@search', '@search']);
+
+  cy.wait(2000) // Waiting for search request is not always working, this is a workaround
 });
 
 Cypress.Commands.add('freeTextSearch', (text: string) => {
