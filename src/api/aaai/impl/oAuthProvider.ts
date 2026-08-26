@@ -77,6 +77,7 @@ export class OAuthAuthenticationProvider implements AuthenticationProvider {
 
     try {
       await this.oAuthService.loadDiscoveryDocumentAndTryLogin();
+      this.cleanLoginRedirectUrl();
       if (this.oAuthService.hasValidAccessToken()) {
         this.updateUserProfile();
       }
@@ -157,6 +158,21 @@ export class OAuthAuthenticationProvider implements AuthenticationProvider {
   }
   private configure() {
     this.oAuthService.configure(this.makeAuthConfig(this.router));
+  }
+
+  private cleanLoginRedirectUrl(): void {
+    const redirectPath = OAuthAuthenticationProvider.REDIRECTION_PAGE;
+    const pathname = window.location.pathname;
+    const redirectIndex = pathname.indexOf(redirectPath);
+
+    if (redirectIndex < 0) {
+      return;
+    }
+
+    const cleanPath = pathname.substring(0, redirectIndex + redirectPath.length);
+    if (cleanPath !== pathname || window.location.search.length > 0 || window.location.hash.length > 0) {
+      window.history.replaceState(null, window.name, cleanPath);
+    }
   }
 
 
