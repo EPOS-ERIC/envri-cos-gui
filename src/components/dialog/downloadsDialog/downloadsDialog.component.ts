@@ -62,6 +62,17 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
   @ViewChild(MatPaginator, { static: true }) matPaginator: MatPaginator;
   @ViewChild(MatSort) matSort: MatSort;
 
+    // Galaxy endpoints list
+    public galaxyEndpointsList: Array<string> = [
+      'https://usegalaxy.eu',
+      'https://usegalaxy.org',
+      'https://usegalaxy.org.au',
+      'https://usegalaxy.fr',
+      'https://test.galaxyproject.org',
+      'https://galaxy.cfdeworkspace.org',
+      'https://usegalaxy.cz'
+    ];
+
   public dataSource = new MatTableDataSource<FormatElement>([]);
   public displayedColumns: string[] = ['select', 'name', 'format', 'download', 'copy', 'galaxy'];
   public selection = new SelectionModel<FormatElement>(true, []);
@@ -78,6 +89,8 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
   public environmentOps = false;
   public environmentSelected: SimpleEnvironment | null = null;
   public environments: Environment[] = [];
+
+  public selectedGalaxyEndpoint: string | undefined = 'https://usegalaxy.eu';
 
   // Property to identify if we are dealing with Software (Source Code or Application)
   private isSoftware = false;
@@ -263,23 +276,29 @@ export class DownloadsDialogComponent implements OnInit, AfterViewInit, AfterCon
 
       const payload = this.buildGalaxyLandingPayload(elem, resolvedUrl);
 
-      void this.http.post('https://usegalaxy.eu/api/data_landings', payload).subscribe({
-        next: (response: { uuid?: string }) => {
-          const uuid = response.uuid;
+      if(this.selectedGalaxyEndpoint){
+        void this.http.post(`${this.selectedGalaxyEndpoint}/api/data_landings`, payload).subscribe({
+          next: (response: { uuid?: string }) => {
+            const uuid = response.uuid;
 
-          if (uuid === undefined || uuid === '') {
-            this.notifier.sendNotification('Galaxy landing response did not include an UUID', 'x', 'error', 5000);
-            return;
-          }
+            if (uuid === undefined || uuid === '') {
+              this.notifier.sendNotification('Galaxy landing response did not include an UUID', 'x', 'error', 5000);
+              return;
+            }
 
-          const landingUrl = `https://usegalaxy.eu/tool_landings/${uuid}`;
+            const landingUrl = `${this.selectedGalaxyEndpoint}/tool_landings/${uuid}`;
 
-          window.open(landingUrl, '_blank');
-        },
-        error: () => {
-          this.notifier.sendNotification('Failed to send Galaxy landing request', 'x', 'error', 5000);
-        },
-      });
+            window.open(landingUrl, '_blank');
+          },
+          error: () => {
+            this.notifier.sendNotification('Failed to send Galaxy landing request', 'x', 'error', 5000);
+          },
+        });
+      }
+      else{
+        this.notifier.sendNotification('No Galaxxy URL was specified', 'x', 'error', 5000);
+        return;
+      }
     });
   }
 
